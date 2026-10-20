@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#202024">
-<meta name="description" content="Pocket Tools — 16 everyday tools in one free app: calculator, converter, BMI, password generator, QR maker, notes, todo, timer and more.">
+<meta name="description" content="Pocket Tools — 16 everyday tools in one free app. 16 outils gratuits. 16 أداة مجانية.">
 <title>Pocket Tools — 16 Tools in One</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23c47046'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23202024' font-family='sans-serif' font-weight='bold'%3EP%3C/text%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- QR library (only used by the QR tool; everything else works fully offline) -->
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <style>
   :root{
@@ -27,13 +26,12 @@
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
   body{
-    font-family:'Sora',system-ui,-apple-system,sans-serif;
+    font-family:'Sora','Cairo',system-ui,-apple-system,sans-serif;
     background:var(--bg); color:var(--text);
     min-height:100vh; line-height:1.5;
     transition:background .3s,color .3s;
   }
   .app{max-width:880px;margin:0 auto;padding:0 16px 120px}
-  /* ---------- header ---------- */
   header{
     position:sticky; top:0; z-index:20;
     display:flex; align-items:center; gap:12px;
@@ -52,15 +50,15 @@
   .brand h1{font-size:18px;margin:0;font-weight:700;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .brand small{display:block;font-size:11px;color:var(--muted);font-weight:500}
   .icon-btn{
-    width:40px;height:40px;border-radius:12px;flex:none;cursor:pointer;
+    height:40px;min-width:40px;padding:0 10px;border-radius:12px;flex:none;cursor:pointer;
     background:var(--card); border:1px solid var(--border); color:var(--text);
     display:grid;place-items:center; transition:transform .15s, border-color .2s;
+    font-family:inherit;font-weight:700;font-size:13px;
   }
   .icon-btn:active{transform:scale(.92)}
   .icon-btn:hover{border-color:var(--accent)}
   .icon-btn svg{width:20px;height:20px}
   #backBtn{display:none}
-  /* ---------- home ---------- */
   .search-wrap{position:relative;margin:20px 0 6px}
   .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
   #search{
@@ -73,7 +71,7 @@
   .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}
   .tool-card{
     background:var(--card); border:1px solid var(--border); border-radius:18px;
-    padding:18px 14px; cursor:pointer; text-align:left; font-family:inherit; color:var(--text);
+    padding:18px 14px; cursor:pointer; text-align:inherit; font-family:inherit; color:var(--text);
     transition:transform .18s, border-color .2s, box-shadow .2s;
   }
   .tool-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:var(--shadow)}
@@ -84,7 +82,6 @@
   .tool-card .ticon svg{width:22px;height:22px}
   .tool-card h3{margin:0;font-size:14.5px;font-weight:600}
   .tool-card p{margin:3px 0 0;font-size:11.5px;color:var(--muted)}
-  /* ---------- tool view ---------- */
   #toolView{display:none;animation:fadeUp .25s ease}
   @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .tool-head{margin:22px 0 18px}
@@ -127,11 +124,10 @@
     display:inline-block; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:600;
     background:var(--accent-soft); color:var(--accent); border:1px solid var(--accent); margin-top:8px;
   }
-  /* ---------- calculator ---------- */
   .calc-display{
     background:var(--bg); border:1px solid var(--border); border-radius:14px;
     padding:18px 16px; text-align:right; font-size:30px; font-weight:600;
-    min-height:72px; word-break:break-all; margin-bottom:14px; font-variant-numeric:tabular-nums;
+    min-height:72px; word-break:break-all; margin-bottom:14px; font-variant-numeric:tabular-nums; direction:ltr;
   }
   .calc-keys{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
   .calc-keys button{
@@ -143,13 +139,11 @@
   .calc-keys button.op{color:var(--accent)}
   .calc-keys button.eq{background:var(--accent);border-color:var(--accent);color:#202024}
   .calc-keys button.fn{color:var(--accent2)}
-  /* ---------- timer ---------- */
   .tabs{display:flex;gap:8px;margin-bottom:16px;background:var(--bg);padding:5px;border-radius:12px;border:1px solid var(--border)}
   .tabs button{flex:1;padding:10px;border:none;background:transparent;color:var(--muted);font-family:inherit;font-weight:600;font-size:13.5px;border-radius:9px;cursor:pointer}
   .tabs button.active{background:var(--card);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.2)}
-  .chrono{font-size:52px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:-1px;margin:14px 0}
+  .chrono{font-size:52px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:-1px;margin:14px 0;direction:ltr}
   .chrono small{font-size:26px;color:var(--muted)}
-  /* ---------- todo ---------- */
   .todo-item{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--border)}
   .todo-item:last-child{border-bottom:none}
   .todo-item.done span{text-decoration:line-through;color:var(--muted)}
@@ -159,11 +153,9 @@
   .del{background:none;border:none;color:var(--muted);cursor:pointer;padding:6px}
   .del svg{width:18px;height:18px}
   .del:hover{color:#e05555}
-  /* ---------- color tool ---------- */
   .swatch-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}
   .swatch{height:56px;border-radius:10px;border:1px solid var(--border);cursor:pointer;position:relative}
   .swatch span{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9.5px;font-weight:600;background:rgba(0,0,0,.35);color:#fff;padding:2px 0;border-radius:0 0 9px 9px}
-  /* ---------- misc ---------- */
   .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-top:14px}
   .stat{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
   .stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
@@ -172,9 +164,7 @@
   .checkline input{width:18px;height:18px;accent-color:var(--accent)}
   input[type=range]{width:100%;accent-color:var(--accent)}
   #qrOut{text-align:center;margin-top:16px}
-  #qrOut img{max-width:220px;background:#fff;padding:12px;border-radius:12px}
   .footer{text-align:center;color:var(--muted);font-size:11.5px;margin-top:36px;padding-top:20px;border-top:1px solid var(--border)}
-  /* AdMob banner slot — stays hidden until you wire the native ad SDK after wrapping to Android */
   #admob-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:30;min-height:50px;background:var(--card);border-top:1px solid var(--border)}
   .toast{
     position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);
@@ -183,6 +173,11 @@
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .empty{text-align:center;color:var(--muted);padding:30px;font-size:14px}
+  [dir="rtl"] .search-wrap svg{left:auto;right:14px}
+  [dir="rtl"] #search{padding:14px 44px 14px 14px}
+  [dir="rtl"] .result .big{direction:ltr;unicode-bidi:embed}
+  [dir="rtl"] .stat b{direction:ltr;unicode-bidi:embed}
+  [dir="rtl"] .calc-keys{direction:ltr}
 </style>
 </head>
 <body>
@@ -192,10 +187,11 @@
     <div class="brand">
       <div class="logo">P</div>
       <div>
-        <h1 id="pageTitle">Pocket Tools</h1>
+        <h1>Pocket Tools</h1>
         <small id="pageSub">16 tools · works offline</small>
       </div>
     </div>
+    <button class="icon-btn" id="langBtn" aria-label="Language">EN</button>
     <button class="icon-btn" id="themeBtn" aria-label="Toggle theme"></button>
   </header>
 
@@ -215,10 +211,9 @@
     <div id="toolBody"></div>
   </div>
 
-  <div class="footer">Pocket Tools · free forever · your data stays on this device</div>
+  <div class="footer" id="footerTxt">Pocket Tools · free forever · your data stays on this device</div>
 </div>
 
-<!-- AdMob banner placeholder. When wrapped with Capacitor/Median, the native SDK fills this div. -->
 <div id="admob-banner"></div>
 <div class="toast" id="toast"></div>
 
@@ -226,7 +221,150 @@
 (function(){
 "use strict";
 
-/* ================= ICONS (inline SVG, no emoji) ================= */
+var LANG = 'en';
+try{ LANG = localStorage.getItem('pt-lang') || 'en'; }catch(e){}
+var S = {
+  en:{
+    appSub:'16 tools · works offline', searchPh:'Search tools…',
+    footer:'Pocket Tools · free forever · your data stays on this device',
+    copied:'Copied to clipboard', copyFail:'Copy failed', enterText:'Enter some text first',
+    genQR:'Generate QR', dlPNG:'Download PNG', qrLoading:'QR library loading… check your connection.',
+    qrFail:'Could not generate: too much text.', genFirst:'Generate a QR first', dlFail:'Download failed',
+    length:'Length', pwdUpper:'Uppercase A-Z', pwdLower:'Lowercase a-z', pwdNum:'Numbers 0-9', pwdSym:'Symbols !@#$',
+    selectOne:'Select at least one option', generate:'Generate', copy:'Copy', clear:'Clear',
+    noteCleared:'Note cleared', notesPh:'Start typing… your note saves automatically.',
+    words:'Words', characters:'Characters', lines:'Lines', addTaskPh:'Add a task…',
+    noTasks:'No tasks yet — add one above.', stopwatch:'Stopwatch', timerTab:'Timer',
+    start:'Start', pause:'Pause', reset:'Reset', minutes:'Minutes', seconds:'Seconds', timeUp:'Time is up!',
+    textPh:'Paste or type your text here…', upper:'UPPERCASE', lower:'lowercase', titleCase:'Title Case',
+    reverse:'Reverse', clean:'Clean Spaces', category:'Category', fromL:'From', toL:'To', valueL:'Value',
+    bill:'Bill amount', tipPct:'Tip %', people:'People', perPerson:'/ person',
+    loanAmt:'Loan amount', rate:'Annual interest %', years:'Years', perMonth:'/ month',
+    overMonths:'Over {n} months', totalPayable:'Total payable', totalInterest:'Total interest',
+    height:'Height (cm)', weight:'Weight (kg)', bmiUnit:'kg/m²',
+    bmiUnder:'Underweight', bmiNormal:'Normal', bmiOver:'Overweight', bmiObese:'Obese',
+    dob:'Date of birth', monthsStat:'Months', weeksStat:'Weeks', daysStat:'Days',
+    pickColor:'Pick a color', randBetween:'Random number between', genNumber:'Generate Number',
+    rollDice:'Roll Dice', flipCoin:'Flip Coin', heads:'HEADS', tails:'TAILS',
+    diceRolled:'Two dice rolled', coinFlipped:'Coin flipped', randBetweenSub:'Random between {a} and {b}',
+    invalidRange:'Enter valid min/max', noMatch:'No tools match', tipSub:'Tip {x} · Total {y}',
+    calcError:'Error', yearsOld:'years', ageSub:'{m} months · {d} days',
+    weeksSub:'{w} weeks · approx {mo} months', ofLbl:'of', pctOf:'{a}% of {b}',
+    cat_Calculate:'Calculate', cat_Convert:'Convert', cat_Health:'Health',
+    cat_DateTime:'Date & Time', cat_Security:'Security', cat_Create:'Create',
+    cat_Productivity:'Productivity', cat_Fun:'Fun',
+    n_calc:'Calculator', d_calc:'Basic arithmetic with a clean keypad.',
+    n_unit:'Unit Converter', d_unit:'Length, weight, volume, area, speed & data.',
+    n_pct:'Percentage', d_pct:'Find % of a number, and reverse %.',
+    n_tip:'Tip Calculator', d_tip:'Split the bill with tip, per person.',
+    n_loan:'Loan / EMI', d_loan:'Monthly payment, interest & total cost.',
+    n_bmi:'BMI Calculator', d_bmi:'Body Mass Index with category.',
+    n_age:'Age Calculator', d_age:'Your exact age in years, months, days.',
+    n_datediff:'Date Difference', d_datediff:'Days, weeks & months between two dates.',
+    n_pass:'Password Generator', d_pass:'Strong random passwords, generated on-device.',
+    n_qr:'QR Code Maker', d_qr:'Turn any text or link into a scannable QR code.',
+    n_color:'Color Picker', d_color:'Pick a color, get HEX / RGB / HSL + a 5-tint palette.',
+    n_notes:'Notes', d_notes:'Auto-saved notes stored only on your device.',
+    n_todo:'To-Do List', d_todo:'Simple tasks, saved on your device.',
+    n_timer:'Timer & Stopwatch', d_timer:'Countdown timer and precise stopwatch.',
+    n_text:'Text Tools', d_text:'Word count, case conversion, reverse & clean.',
+    n_random:'Random Generator', d_random:'Random number, dice roll & coin flip.'
+  },
+  fr:{
+    appSub:'16 outils · fonctionne hors ligne', searchPh:'Rechercher un outil…',
+    footer:'Pocket Tools · gratuit à vie · vos données restent sur cet appareil',
+    copied:'Copié !', copyFail:'Échec de copie', enterText:"Entrez du texte d'abord",
+    genQR:'Générer le QR', dlPNG:'Télécharger PNG', qrLoading:'Chargement de la bibliothèque QR…',
+    qrFail:'Échec : texte trop long.', genFirst:'Générez dabord un QR', dlFail:'Échec du téléchargement',
+    length:'Longueur', pwdUpper:'Majuscules A-Z', pwdLower:'Minuscules a-z', pwdNum:'Chiffres 0-9', pwdSym:'Symboles !@#$',
+    selectOne:'Sélectionnez au moins une option', generate:'Générer', copy:'Copier', clear:'Effacer',
+    noteCleared:'Note effacée', notesPh:'Commencez à écrire… enregistrement automatique.',
+    words:'Mots', characters:'Caractères', lines:'Lignes', addTaskPh:'Ajouter une tâche…',
+    noTasks:'Aucune tâche — ajoutez-en une ci-dessus.', stopwatch:'Chronomètre', timerTab:'Minuteur',
+    start:'Démarrer', pause:'Pause', reset:'Réinitialiser', minutes:'Minutes', seconds:'Secondes', timeUp:'Temps écoulé !',
+    textPh:'Collez ou tapez votre texte…', upper:'MAJUSCULES', lower:'minuscules', titleCase:'Nom Propre',
+    reverse:'Inverser', clean:'Nettoyer espaces', category:'Catégorie', fromL:'De', toL:'À', valueL:'Valeur',
+    bill:"Montant de l'addition", tipPct:'Pourboire %', people:'Personnes', perPerson:'/ pers.',
+    loanAmt:'Montant du prêt', rate:'Taux annuel %', years:'Années', perMonth:'/ mois',
+    overMonths:'Sur {n} mois', totalPayable:'Total à payer', totalInterest:'Intérêts totaux',
+    height:'Taille (cm)', weight:'Poids (kg)', bmiUnit:'kg/m²',
+    bmiUnder:'Maigreur', bmiNormal:'Normal', bmiOver:'Surpoids', bmiObese:'Obésité',
+    dob:'Date de naissance', monthsStat:'Mois', weeksStat:'Semaines', daysStat:'Jours',
+    pickColor:'Choisir une couleur', randBetween:'Nombre aléatoire entre', genNumber:'Générer',
+    rollDice:'Lancer les dés', flipCoin:'Pile ou face', heads:'PILE', tails:'FACE',
+    diceRolled:'Deux dés lancés', coinFlipped:'Pièce lancée', randBetweenSub:'Entre {a} et {b}',
+    invalidRange:'Intervalle invalide', noMatch:'Aucun outil ne correspond', tipSub:'Pourboire {x} · Total {y}',
+    calcError:'Erreur', yearsOld:'ans', ageSub:'{m} mois · {d} jours',
+    weeksSub:'{w} sem. · env. {mo} mois', ofLbl:'de', pctOf:'{a}% de {b}',
+    cat_Calculate:'Calculer', cat_Convert:'Convertir', cat_Health:'Santé',
+    cat_DateTime:'Date & heure', cat_Security:'Sécurité', cat_Create:'Créer',
+    cat_Productivity:'Productivité', cat_Fun:'Divertissement',
+    n_calc:'Calculatrice', d_calc:'Calcul simple avec un clavier épuré.',
+    n_unit:'Convertisseur', d_unit:'Longueur, poids, volume, surface, vitesse & données.',
+    n_pct:'Pourcentage', d_pct:"% d'un nombre et pourcentage inverse.",
+    n_tip:'Pourboire', d_tip:"Répartir l'addition avec pourboire, par personne.",
+    n_loan:'Crédit / EMI', d_loan:'Mensualité, intérêts & coût total.',
+    n_bmi:'IMC', d_bmi:'Indice de masse corporelle avec catégorie.',
+    n_age:'Âge', d_age:'Votre âge exact en années, mois et jours.',
+    n_datediff:'Différence de dates', d_datediff:'Jours, semaines & mois entre deux dates.',
+    n_pass:'Mots de passe', d_pass:'Mots de passe forts générés sur l\'appareil.',
+    n_qr:'QR Code', d_qr:'Transformez tout texte ou lien en QR code scannable.',
+    n_color:'Couleurs', d_color:'Choisissez une couleur : HEX/RGB/HSL + palette.',
+    n_notes:'Notes', d_notes:'Notes enregistrées automatiquement sur votre appareil.',
+    n_todo:'Tâches', d_todo:'Tâches simples, sauvegardées sur l\'appareil.',
+    n_timer:'Minuteur & Chrono', d_timer:'Minuteur et chronomètre de précision.',
+    n_text:'Outils de texte', d_text:'Compte de mots, casse, inversion & nettoyage.',
+    n_random:'Aléatoire', d_random:'Nombre aléatoire, dés et pile ou face.'
+  },
+  ar:{
+    appSub:'16 أداة · يعمل دون اتصال', searchPh:'ابحث عن أدوات…',
+    footer:'Pocket Tools · مجاني للأبد · بياناتك تبقى على جهازك',
+    copied:'تم النسخ', copyFail:'فشل النسخ', enterText:'أدخل نصاً أولاً',
+    genQR:'إنشاء رمز QR', dlPNG:'تحميل PNG', qrLoading:'جارٍ التحميل… تحقق من الاتصال.',
+    qrFail:'تعذر الإنشاء: النص طويل جداً.', genFirst:'أنشئ رمزاً أولاً', dlFail:'فشل التحميل',
+    length:'الطول', pwdUpper:'أحرف كبيرة A-Z', pwdLower:'أحرف صغيرة a-z', pwdNum:'أرقام 0-9', pwdSym:'رموز !@#$',
+    selectOne:'اختر خياراً واحداً على الأقل', generate:'إنشاء', copy:'نسخ', clear:'مسح',
+    noteCleared:'تم مسح الملاحظة', notesPh:'ابدأ الكتابة… تُحفظ تلقائياً.',
+    words:'كلمات', characters:'أحرف', lines:'أسطر', addTaskPh:'أضف مهمة…',
+    noTasks:'لا توجد مهام بعد — أضف من الأعلى.', stopwatch:'السبت', timerTab:'المؤقت',
+    start:'ابدأ', pause:'إيقاف', reset:'إعادة ضبط', minutes:'دقائق', seconds:'ثوانٍ', timeUp:'انتهى الوقت!',
+    textPh:'الصق أو اكتب النص هنا…', upper:'أحرف كبيرة', lower:'أحرف صغيرة', titleCase:'أول حرف كبير',
+    reverse:'عكس', clean:'تنظيف المسافات', category:'الفئة', fromL:'من', toL:'إلى', valueL:'القيمة',
+    bill:'مبلغ الفاتورة', tipPct:'إكرامية %', people:'الأشخاص', perPerson:'للشخص',
+    loanAmt:'مبلغ القرض', rate:'الفائدة السنوية %', years:'سنوات', perMonth:'شهرياً',
+    overMonths:'خلال {n} شهراً', totalPayable:'إجمالي المستحق', totalInterest:'إجمالي الفائدة',
+    height:'الطول (سم)', weight:'الوزن (كغ)', bmiUnit:'كغ/م²',
+    bmiUnder:'نحافة', bmiNormal:'طبيعي', bmiOver:'زيادة وزن', bmiObese:'سمنة',
+    dob:'تاريخ الميلاد', monthsStat:'أشهر', weeksStat:'أسابيع', daysStat:'أيام',
+    pickColor:'اختر لوناً', randBetween:'رقم عشوائي بين', genNumber:'إنشاء رقم',
+    rollDice:'إرم النرد', flipCoin:'قلب العملة', heads:'وجه', tails:'كتابة',
+    diceRolled:'تم إرم النردين', coinFlipped:'تم قلب العملة', randBetweenSub:'بين {a} و {b}',
+    invalidRange:'أدخل نطاقاً صحيحاً', noMatch:'لا توجد أدوات مطابقة', tipSub:'إكرامية {x} · الإجمالي {y}',
+    calcError:'خطأ', yearsOld:'عام', ageSub:'{m} شهراً · {d} يوماً',
+    weeksSub:'{w} أسبوع · تقريباً {mo} شهراً', ofLbl:'من', pctOf:'{a}٪ من {b}',
+    cat_Calculate:'حساب', cat_Convert:'تحويل', cat_Health:'الصحة',
+    cat_DateTime:'التاريخ والوقت', cat_Security:'الأمان', cat_Create:'إنشاء',
+    cat_Productivity:'الإنتاجية', cat_Fun:'تسلية',
+    n_calc:'الآلة الحاسبة', d_calc:'عمليات حسابية بلوحة مفاتيح أنيقة.',
+    n_unit:'تحويل الوحدات', d_unit:'طول، وزن، حجم، مساحة، سرعة وبيانات.',
+    n_pct:'النسبة المئوية', d_pct:'احسب النسبة المئوية وعكسها.',
+    n_tip:'حاسبة الإكرامية', d_tip:'قسّم الفاتورة مع الإكرامية للشخص.',
+    n_loan:'القرض والقسط', d_loan:'القسط الشهري والفائدة وإجمالي التكلفة.',
+    n_bmi:'مؤشر كتلة الجسم', d_bmi:'مؤشر كتلة الجسم مع التصنيف.',
+    n_age:'حاسبة العمر', d_age:'عمرك الدقيق بالسنوات والأشهر والأيام.',
+    n_datediff:'الفرق بين التواريخ', d_datediff:'أيام وأسابيع وشهور بين تاريخين.',
+    n_pass:'مولد كلمات المرور', d_pass:'كلمات مرور قوية تُولد على جهازك.',
+    n_qr:'منشئ رمز QR', d_qr:'حوّل أي نص أو رابط إلى رمز QR قابل للمسح.',
+    n_color:'منتقي الألوان', d_color:'اختر لوناً، واحصل على HEX/RGB/HSL + لوحة ألوان.',
+    n_notes:'الملاحظات', d_notes:'ملاحظات تُحفظ تلقائياً على جهازك فقط.',
+    n_todo:'قائمة المهام', d_todo:'مهام بسيطة محفوظة على جهازك.',
+    n_timer:'المؤقت والسبت', d_timer:'مؤقت تنازلي وسبت دقيق.',
+    n_text:'أدوات النص', d_text:'عد الكلمات، تغيير الأحرف، عكس وتنظيف.',
+    n_random:'مولد أرقام عشوائية', d_random:'رقم عشوائي، نرد وقلب عملة.'
+  }
+};
+function T(k){ return (S[LANG]&&S[LANG][k]) || (S.en[k]) || k; }
+
 var ICONS = {
   calc:'<rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8.01" y2="11"/><line x1="12" y1="11" x2="12.01" y2="11"/><line x1="16" y1="11" x2="16.01" y2="11"/><line x1="8" y1="15" x2="8.01" y2="15"/><line x1="12" y1="15" x2="12.01" y2="15"/><line x1="16" y1="15" x2="16.01" y2="15"/><line x1="8" y1="19" x2="8.01" y2="19"/><line x1="12" y1="19" x2="16" y2="19"/>',
   ruler:'<path d="M3 17 L17 3 L21 7 L7 21 Z"/><line x1="7" y1="7" x2="10" y2="10"/><line x1="11" y1="11" x2="13" y2="13"/><line x1="14" y1="14" x2="16" y2="16"/>',
@@ -253,48 +391,37 @@ var ICONS = {
   refresh:'<polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 1 1-2-9.4L23 10"/>',
   play:'<polygon points="7 4 20 12 7 20 7 4" fill="currentColor" stroke="none"/>',
   pause:'<rect x="7" y="5" width="3.5" height="14" rx="1" fill="currentColor" stroke="none"/><rect x="13.5" y="5" width="3.5" height="14" rx="1" fill="currentColor" stroke="none"/>',
-  checkmark:'<polyline points="20 6 9 17 4 12"/>',
-  search:'<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/>'
+  checkmark:'<polyline points="20 6 9 17 4 12"/>'
 };
 function svgIcon(name,size){
   return '<svg viewBox="0 0 24 24" width="'+(size||20)+'" height="'+(size||20)+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICONS[name]+'</svg>';
 }
 
-/* ================= helpers ================= */
 var $ = function(s,el){return (el||document).querySelector(s);};
 function toast(msg){
   var t=$('#toast'); t.textContent=msg; t.classList.add('show');
   clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove('show');},1800);
 }
 function copyText(txt){
-  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){toast('Copied to clipboard');},function(){toast('Copy failed');});}
-  else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Copied');}catch(e){toast('Copy failed');}document.body.removeChild(ta);}
+  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){toast(T('copied'));},function(){toast(T('copyFail'));});}
+  else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(T('copied'));}catch(e){toast(T('copyFail'));}document.body.removeChild(ta);}
 }
 function el(html){var d=document.createElement('div');d.innerHTML=html.trim();return d.firstChild;}
 function showResult(box,big,sub){box.querySelector('.big').textContent=big; if(sub!==undefined) box.querySelector('.sub').textContent=sub; box.classList.add('show');}
 
-/* ================= AdMob hooks (fill after wrapping to Android) =================
-   When you wrap this HTML with Capacitor + @capacitor-community/admob (or Median/GoNative),
-   the native bridge exposes an interstitial method. Call it here — every 5 tool opens.
-   Replace the console.log with your native call, e.g.:
-     AdMob.showInterstitial().catch(function(){});
-*/
 var AdmobHooks = {
   toolOpenCount: 0,
   maybeInterstitial: function(){
     this.toolOpenCount++;
     if(this.toolOpenCount % 5 === 0){
-      // === INTERSTITIAL AD CALL POINT ===
       console.log('[AdMob] interstitial slot — wire your native SDK here');
-      // ===================================
     }
   },
   bannerSlotId: 'admob-banner'
 };
 window.AdmobHooks = AdmobHooks;
 
-/* ================= theme ================= */
-var themeBtn=$('#themeBtn'), backBtn=$('#backBtn');
+var themeBtn=$('#themeBtn'), backBtn=$('#backBtn'), langBtn=$('#langBtn');
 function renderThemeIcon(){
   var dark=document.documentElement.getAttribute('data-theme')==='dark';
   themeBtn.innerHTML=svgIcon(dark?'sun':'moon',20);
@@ -310,13 +437,30 @@ try{var saved=localStorage.getItem('pt-theme');if(saved){document.documentElemen
 renderThemeIcon();
 backBtn.innerHTML=svgIcon('back',20);
 
-/* ================= tools registry ================= */
-/* Each tool: {id, name, cat, icon, desc, init(container)} */
+var LANG_ORDER=['en','fr','ar'];
+var LANG_LABEL={en:'EN',fr:'FR',ar:'ع'};
+function applyLang(){
+  document.documentElement.lang=LANG;
+  document.documentElement.dir = LANG==='ar'?'rtl':'ltr';
+  langBtn.textContent=LANG_LABEL[LANG];
+  $('#pageSub').textContent=T('appSub');
+  $('#search').placeholder=T('searchPh');
+  $('#footerTxt').textContent=T('footer');
+  try{localStorage.setItem('pt-lang',LANG);}catch(e){}
+}
+langBtn.addEventListener('click',function(){
+  var i=LANG_ORDER.indexOf(LANG);
+  LANG=LANG_ORDER[(i+1)%LANG_ORDER.length];
+  applyLang();
+  if(currentView==='home'){ renderHome($('#search').value); }
+  else { var t=TOOLS.find(function(x){return x.id===currentView;}); if(t){ openTool(t,true); } }
+});
+applyLang();
+
 var TOOLS = [];
 function reg(t){TOOLS.push(t);}
 
-/* ---------- 1. Calculator ---------- */
-reg({id:'calc',name:'Calculator',cat:'Calculate',icon:'calc',desc:'Basic arithmetic with a clean keypad.',
+reg({id:'calc',cat:'Calculate',icon:'calc',
 init:function(c){
   c.innerHTML='<div class="panel"><div class="calc-display" id="calcDisp">0</div>'+
   '<div class="calc-keys">'+
@@ -331,11 +475,11 @@ init:function(c){
   function compute(){
     try{
       var e=expr.replace(/%/g,'/100');
-      if(!/^[0-9+\-*/().\s]+$/.test(e)) return 'Error';
+      if(!/^[0-9+\-*/().\s]+$/.test(e)) return T('calcError');
       var v=Function('"use strict";return ('+e+')')();
-      if(typeof v!=='number'||!isFinite(v)) return 'Error';
+      if(typeof v!=='number'||!isFinite(v)) return T('calcError');
       return String(Math.round(v*1e10)/1e10);
-    }catch(err){return 'Error';}
+    }catch(err){return T('calcError');}
   }
   c.querySelectorAll('.calc-keys button').forEach(function(b){
     b.addEventListener('click',function(){
@@ -343,16 +487,12 @@ init:function(c){
       if(k==='C'){expr='';}
       else if(k==='back'){expr=expr.slice(0,-1);}
       else if(k==='='){expr=compute();}
-      else{
-        if(expr==='Error') expr='';
-        expr+=k;
-      }
+      else{ if(expr===T('calcError')) expr=''; expr+=k; }
       render();
     });
   });
 }});
 
-/* ---------- 2. Unit Converter ---------- */
 var UNITS = {
   Length:{m:1,km:1000,cm:0.01,mm:0.001,mi:1609.344,yd:0.9144,ft:0.3048,in:0.0254},
   Weight:{kg:1,g:0.001,lb:0.45359237,oz:0.0283495231,t:1000,st:6.35029318},
@@ -361,12 +501,12 @@ var UNITS = {
   Speed:{ms:1,kmh:0.277778,mph:0.44704,kn:0.514444,fts:0.3048},
   Data:{B:1,KB:1024,MB:1048576,GB:1073741824,TB:1099511627776,bit:0.125}
 };
-reg({id:'unit',name:'Unit Converter',cat:'Convert',icon:'ruler',desc:'Length, weight, volume, area, speed & data.',
+reg({id:'unit',cat:'Convert',icon:'ruler',
 init:function(c){
-  c.innerHTML='<div class="panel"><label>Category</label><select id="uCat"></select>'+
-  '<div class="row" style="margin-top:14px"><div><label>From</label><select id="uFrom"></select></div>'+
-  '<div><label>To</label><select id="uTo"></select></div></div>'+
-  '<label style="margin-top:14px">Value</label><input type="number" id="uVal" value="1" step="any">'+
+  c.innerHTML='<div class="panel"><label>'+T('category')+'</label><select id="uCat"></select>'+
+  '<div class="row" style="margin-top:14px"><div><label>'+T('fromL')+'</label><select id="uFrom"></select></div>'+
+  '<div><label>'+T('toL')+'</label><select id="uTo"></select></div></div>'+
+  '<label style="margin-top:14px">'+T('valueL')+'</label><input type="number" id="uVal" value="1" step="any">'+
   '<div class="result" id="uRes"><div class="big"></div><div class="sub"></div></div></div>';
   var cat=$('#uCat',c), from=$('#uFrom',c), to=$('#uTo',c), val=$('#uVal',c), res=$('#uRes',c);
   Object.keys(UNITS).forEach(function(k){cat.appendChild(el('<option value="'+k+'">'+k+'</option>'));});
@@ -389,18 +529,17 @@ init:function(c){
   fillUnits();
 }});
 
-/* ---------- 3. Percentage ---------- */
-reg({id:'pct',name:'Percentage',cat:'Calculate',icon:'percent',desc:'Find % of a number, and reverse %.',
+reg({id:'pct',cat:'Calculate',icon:'percent',
 init:function(c){
-  c.innerHTML='<div class="panel"><div class="row"><div><label>X % of Y</label><input type="number" id="p1" value="15" step="any"></div>'+
-  '<div><label>of</label><input type="number" id="p2" value="200" step="any"></div></div>'+
+  c.innerHTML='<div class="panel"><div class="row"><div><label>X %</label><input type="number" id="p1" value="15" step="any"></div>'+
+  '<div><label>'+T('ofLbl')+' Y</label><input type="number" id="p2" value="200" step="any"></div></div>'+
   '<div class="result" id="pRes1"><div class="big"></div><div class="sub"></div></div>'+
-  '<label>X is what % of Y?</label><div class="row"><div><input type="number" id="p3" value="30" step="any"></div>'+
+  '<label>X / Y ?</label><div class="row"><div><input type="number" id="p3" value="30" step="any"></div>'+
   '<div><input type="number" id="p4" value="200" step="any"></div></div>'+
   '<div class="result" id="pRes2"><div class="big"></div><div class="sub"></div></div></div>';
   function calc(){
     var a=parseFloat($('#p1',c).value), b=parseFloat($('#p2',c).value);
-    if(!isNaN(a)&&!isNaN(b)) showResult($('#pRes1',c), (a*b/100).toLocaleString(), a+'% of '+b);
+    if(!isNaN(a)&&!isNaN(b)) showResult($('#pRes1',c), (a*b/100).toLocaleString(), T('pctOf').replace('{a}',a).replace('{b}',b));
     var x=parseFloat($('#p3',c).value), y=parseFloat($('#p4',c).value);
     if(!isNaN(x)&&!isNaN(y)&&y!==0) showResult($('#pRes2',c), (x/y*100).toFixed(2)+'%', x+' / '+y);
   }
@@ -408,39 +547,37 @@ init:function(c){
   calc();
 }});
 
-/* ---------- 4. Tip Calculator ---------- */
-reg({id:'tip',name:'Tip Calculator',cat:'Calculate',icon:'receipt',desc:'Split the bill with tip, per person.',
+reg({id:'tip',cat:'Calculate',icon:'receipt',
 init:function(c){
-  c.innerHTML='<div class="panel"><label>Bill amount</label><input type="number" id="tBill" value="50" step="any">'+
-  '<div class="row"><div><label>Tip %</label><input type="number" id="tPct" value="15"></div>'+
-  '<div><label>People</label><input type="number" id="tPeople" value="2" min="1"></div></div>'+
+  c.innerHTML='<div class="panel"><label>'+T('bill')+'</label><input type="number" id="tBill" value="50" step="any">'+
+  '<div class="row"><div><label>'+T('tipPct')+'</label><input type="number" id="tPct" value="15"></div>'+
+  '<div><label>'+T('people')+'</label><input type="number" id="tPeople" value="2" min="1"></div></div>'+
   '<div class="result" id="tRes"><div class="big"></div><div class="sub"></div></div></div>';
   function calc(){
     var bill=parseFloat($('#tBill',c).value), pct=parseFloat($('#tPct',c).value), n=parseInt($('#tPeople',c).value);
     if(isNaN(bill)||isNaN(pct)||!n||n<1) return;
     var tip=bill*pct/100, total=bill+tip, each=total/n;
-    showResult($('#tRes',c), each.toFixed(2)+' / person', 'Tip '+tip.toFixed(2)+' · Total '+total.toFixed(2));
+    showResult($('#tRes',c), each.toFixed(2)+' '+T('perPerson'), T('tipSub').replace('{x}',tip.toFixed(2)).replace('{y}',total.toFixed(2)));
   }
   c.querySelectorAll('input').forEach(function(i){i.addEventListener('input',calc);});
   calc();
 }});
 
-/* ---------- 5. Loan Calculator ---------- */
-reg({id:'loan',name:'Loan / EMI',cat:'Calculate',icon:'bank',desc:'Monthly payment, interest & total cost.',
+reg({id:'loan',cat:'Calculate',icon:'bank',
 init:function(c){
-  c.innerHTML='<div class="panel"><label>Loan amount</label><input type="number" id="lP" value="10000" step="any">'+
-  '<div class="row"><div><label>Annual interest %</label><input type="number" id="lR" value="7" step="any"></div>'+
-  '<div><label>Years</label><input type="number" id="lY" value="5" min="1"></div></div>'+
+  c.innerHTML='<div class="panel"><label>'+T('loanAmt')+'</label><input type="number" id="lP" value="10000" step="any">'+
+  '<div class="row"><div><label>'+T('rate')+'</label><input type="number" id="lR" value="7" step="any"></div>'+
+  '<div><label>'+T('years')+'</label><input type="number" id="lY" value="5" min="1"></div></div>'+
   '<div class="result" id="lRes"><div class="big"></div><div class="sub"></div></div>'+
-  '<div class="stat-grid"><div class="stat"><b id="lTotal">–</b><span>Total payable</span></div>'+
-  '<div class="stat"><b id="lInt">–</b><span>Total interest</span></div></div></div>';
+  '<div class="stat-grid"><div class="stat"><b id="lTotal">–</b><span>'+T('totalPayable')+'</span></div>'+
+  '<div class="stat"><b id="lInt">–</b><span>'+T('totalInterest')+'</span></div></div></div>';
   function calc(){
     var P=parseFloat($('#lP',c).value), apy=parseFloat($('#lR',c).value), y=parseInt($('#lY',c).value);
     if(isNaN(P)||isNaN(apy)||!y||y<1) return;
     var r=apy/1200, n=y*12, emi;
     if(r===0) emi=P/n; else emi=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
     var total=emi*n;
-    showResult($('#lRes',c), emi.toFixed(2)+' / month', 'Over '+n+' months');
+    showResult($('#lRes',c), emi.toFixed(2)+' '+T('perMonth'), T('overMonths').replace('{n}',n));
     $('#lTotal',c).textContent=total.toFixed(0);
     $('#lInt',c).textContent=(total-P).toFixed(0);
   }
@@ -448,32 +585,30 @@ init:function(c){
   calc();
 }});
 
-/* ---------- 6. BMI ---------- */
-reg({id:'bmi',name:'BMI Calculator',cat:'Health',icon:'heart',desc:'Body Mass Index with category.',
+reg({id:'bmi',cat:'Health',icon:'heart',
 init:function(c){
-  c.innerHTML='<div class="panel"><div class="row"><div><label>Height (cm)</label><input type="number" id="bH" value="170"></div>'+
-  '<div><label>Weight (kg)</label><input type="number" id="bW" value="70" step="any"></div></div>'+
+  c.innerHTML='<div class="panel"><div class="row"><div><label>'+T('height')+'</label><input type="number" id="bH" value="170"></div>'+
+  '<div><label>'+T('weight')+'</label><input type="number" id="bW" value="70" step="any"></div></div>'+
   '<div class="result" id="bRes"><div class="big"></div><div class="sub"></div><div class="pill" id="bPill"></div></div></div>';
   function calc(){
     var h=parseFloat($('#bH',c).value), w=parseFloat($('#bW',c).value);
     if(!h||!w) return;
     var bmi=w/Math.pow(h/100,2);
-    var cat = bmi<18.5?'Underweight': bmi<25?'Normal': bmi<30?'Overweight':'Obese';
-    showResult($('#bRes',c), bmi.toFixed(1), 'kg/m²');
+    var cat = bmi<18.5?T('bmiUnder'): bmi<25?T('bmiNormal'): bmi<30?T('bmiOver'):T('bmiObese');
+    showResult($('#bRes',c), bmi.toFixed(1), T('bmiUnit'));
     $('#bPill',c).textContent=cat;
   }
   c.querySelectorAll('input').forEach(function(i){i.addEventListener('input',calc);});
   calc();
 }});
 
-/* ---------- 7. Age Calculator ---------- */
-reg({id:'age',name:'Age Calculator',cat:'Date & Time',icon:'cake',desc:'Your exact age in years, months, days.',
+reg({id:'age',cat:'DateTime',icon:'cake',
 init:function(c){
-  c.innerHTML='<div class="panel"><label>Date of birth</label><input type="date" id="aDob">'+
+  c.innerHTML='<div class="panel"><label>'+T('dob')+'</label><input type="date" id="aDob">'+
   '<div class="result" id="aRes"><div class="big"></div><div class="sub"></div></div>'+
-  '<div class="stat-grid"><div class="stat"><b id="aMonths">–</b><span>Months</span></div>'+
-  '<div class="stat"><b id="aWeeks">–</b><span>Weeks</span></div>'+
-  '<div class="stat"><b id="aDays">–</b><span>Days</span></div></div></div>';
+  '<div class="stat-grid"><div class="stat"><b id="aMonths">–</b><span>'+T('monthsStat')+'</span></div>'+
+  '<div class="stat"><b id="aWeeks">–</b><span>'+T('weeksStat')+'</span></div>'+
+  '<div class="stat"><b id="aDays">–</b><span>'+T('daysStat')+'</span></div></div></div>';
   function calc(){
     var dob=new Date($('#aDob',c).value);
     if(isNaN(dob)) return;
@@ -482,7 +617,7 @@ init:function(c){
     if(d<0){m--; d+=new Date(now.getFullYear(),now.getMonth(),0).getDate();}
     if(m<0){y--; m+=12;}
     var days=Math.floor((now-dob)/86400000);
-    showResult($('#aRes',c), y+' years', m+' months · '+d+' days');
+    showResult($('#aRes',c), y+' '+T('yearsOld'), T('ageSub').replace('{m}',m).replace('{d}',d));
     $('#aMonths',c).textContent=y*12+m;
     $('#aWeeks',c).textContent=Math.floor(days/7).toLocaleString();
     $('#aDays',c).textContent=days.toLocaleString();
@@ -490,37 +625,35 @@ init:function(c){
   $('#aDob',c).addEventListener('input',calc);
 }});
 
-/* ---------- 8. Date Difference ---------- */
-reg({id:'datediff',name:'Date Difference',cat:'Date & Time',icon:'calendar',desc:'Days, weeks & months between two dates.',
+reg({id:'datediff',cat:'DateTime',icon:'calendar',
 init:function(c){
-  c.innerHTML='<div class="panel"><div class="row"><div><label>From</label><input type="date" id="d1"></div>'+
-  '<div><label>To</label><input type="date" id="d2"></div></div>'+
+  c.innerHTML='<div class="panel"><div class="row"><div><label>'+T('fromL')+'</label><input type="date" id="d1"></div>'+
+  '<div><label>'+T('toL')+'</label><input type="date" id="d2"></div></div>'+
   '<div class="result" id="dRes"><div class="big"></div><div class="sub"></div></div></div>';
   function calc(){
     var a=new Date($('#d1',c).value), b=new Date($('#d2',c).value);
     if(isNaN(a)||isNaN(b)) return;
     var days=Math.round((b-a)/86400000);
-    showResult($('#dRes',c), Math.abs(days).toLocaleString()+' days', Math.abs(Math.floor(days/7))+' weeks · approx '+Math.abs(Math.round(days/30.44))+' months');
+    showResult($('#dRes',c), Math.abs(days).toLocaleString()+' '+T('daysStat'), T('weeksSub').replace('{w}',Math.abs(Math.floor(days/7))).replace('{mo}',Math.abs(Math.round(days/30.44))));
   }
   c.querySelectorAll('input').forEach(function(i){i.addEventListener('input',calc);});
 }});
 
-/* ---------- 9. Password Generator ---------- */
-reg({id:'pass',name:'Password Generator',cat:'Security',icon:'key',desc:'Strong random passwords, generated on-device.',
+reg({id:'pass',cat:'Security',icon:'key',
 init:function(c){
-  c.innerHTML='<div class="panel"><label>Length: <span id="plLen">16</span></label><input type="range" id="pLen" min="6" max="64" value="16">'+
-  '<div class="checkline"><input type="checkbox" id="pU" checked> Uppercase A-Z</div>'+
-  '<div class="checkline"><input type="checkbox" id="pL" checked> Lowercase a-z</div>'+
-  '<div class="checkline"><input type="checkbox" id="pN" checked> Numbers 0-9</div>'+
-  '<div class="checkline"><input type="checkbox" id="pS" checked> Symbols !@#$</div>'+
-  '<div class="result show" id="pRes"><div class="big" id="pOut" style="font-family:monospace;word-break:break-all"></div></div>'+
-  '<div class="btn-row"><button class="btn primary" id="pGen">'+svgIcon('refresh',16)+' Generate</button>'+
-  '<button class="btn" id="pCopy">'+svgIcon('copy',16)+' Copy</button></div></div>';
+  c.innerHTML='<div class="panel"><label>'+T('length')+': <span id="plLen">16</span></label><input type="range" id="pLen" min="6" max="64" value="16">'+
+  '<div class="checkline"><input type="checkbox" id="pU" checked> '+T('pwdUpper')+'</div>'+
+  '<div class="checkline"><input type="checkbox" id="pL" checked> '+T('pwdLower')+'</div>'+
+  '<div class="checkline"><input type="checkbox" id="pN" checked> '+T('pwdNum')+'</div>'+
+  '<div class="checkline"><input type="checkbox" id="pS" checked> '+T('pwdSym')+'</div>'+
+  '<div class="result show" id="pRes"><div class="big" id="pOut" style="font-family:monospace;word-break:break-all;direction:ltr"></div></div>'+
+  '<div class="btn-row"><button class="btn primary" id="pGen">'+svgIcon('refresh',16)+' '+T('generate')+'</button>'+
+  '<button class="btn" id="pCopy">'+svgIcon('copy',16)+' '+T('copy')+'</button></div></div>';
   var sets={U:'ABCDEFGHJKLMNPQRSTUVWXYZ',L:'abcdefghijkmnpqrstuvwxyz',N:'23456789',S:'!@#$%^&*()-_=+[]{};:,.<>?'};
   function gen(){
     var len=parseInt($('#pLen',c).value), pool='';
     ['U','L','N','S'].forEach(function(k){if($('#p'+k,c).checked) pool+=sets[k];});
-    if(!pool){$('#pOut',c).textContent='Select at least one option';return;}
+    if(!pool){$('#pOut',c).textContent=T('selectOne');return;}
     var out='';
     var arr=new Uint32Array(len);
     if(window.crypto&&crypto.getRandomValues){crypto.getRandomValues(arr); for(var i=0;i<len;i++) out+=pool[arr[i]%pool.length];}
@@ -534,29 +667,28 @@ init:function(c){
   gen();
 }});
 
-/* ---------- 10. QR Code Generator ---------- */
-reg({id:'qr',name:'QR Code Maker',cat:'Create',icon:'qr',desc:'Turn any text or link into a scannable QR code.',
+reg({id:'qr',cat:'Create',icon:'qr',
 init:function(c){
-  c.innerHTML='<div class="panel"><label>Text or URL</label><input type="text" id="qText" placeholder="https://example.com" value="https://">'+
-  '<div class="btn-row"><button class="btn primary" id="qGen">Generate QR</button>'+
-  '<button class="btn" id="qDl">Download PNG</button></div>'+
+  c.innerHTML='<div class="panel"><label>Text / URL</label><input type="text" id="qText" placeholder="https://" value="https://">'+
+  '<div class="btn-row"><button class="btn primary" id="qGen">'+T('genQR')+'</button>'+
+  '<button class="btn" id="qDl">'+T('dlPNG')+'</button></div>'+
   '<div id="qrOut"></div></div>';
   var out=$('#qrOut',c), lastSvg='';
   function gen(){
     var txt=$('#qText',c).value.trim();
-    if(!txt){toast('Enter some text first');return;}
-    if(typeof qrcode==='undefined'){out.innerHTML='<p class="empty">QR library loading… check your connection and try again.</p>';return;}
+    if(!txt){toast(T('enterText'));return;}
+    if(typeof qrcode==='undefined'){out.innerHTML='<p class="empty">'+T('qrLoading')+'</p>';return;}
     try{
       var qr=qrcode(0,'M'); qr.addData(txt); qr.make();
       lastSvg=qr.createSvgTag(8,4);
       out.innerHTML='<div style="display:inline-block;background:#fff;padding:14px;border-radius:12px;line-height:0">'+lastSvg+'</div>';
       var svgEl=out.querySelector('svg');
       if(svgEl){svgEl.style.maxWidth='200px';svgEl.style.height='auto';}
-    }catch(e){out.innerHTML='<p class="empty">Could not generate: too much text.</p>';lastSvg='';}
+    }catch(e){out.innerHTML='<p class="empty">'+T('qrFail')+'</p>';lastSvg='';}
   }
   $('#qGen',c).addEventListener('click',gen);
   $('#qDl',c).addEventListener('click',function(){
-    if(!lastSvg){toast('Generate a QR first');return;}
+    if(!lastSvg){toast(T('genFirst'));return;}
     try{
       var blob=new Blob([lastSvg],{type:'image/svg+xml'});
       var url=URL.createObjectURL(blob);
@@ -569,16 +701,15 @@ init:function(c){
         var a=document.createElement('a');a.href=cv.toDataURL('image/png');a.download='qrcode.png';
         document.body.appendChild(a);a.click();document.body.removeChild(a);
       };
-      img.onerror=function(){URL.revokeObjectURL(url);toast('Download failed');};
+      img.onerror=function(){URL.revokeObjectURL(url);toast(T('dlFail'));};
       img.src=url;
-    }catch(e){toast('Download failed');}
+    }catch(e){toast(T('dlFail'));}
   });
 }});
 
-/* ---------- 11. Color Picker ---------- */
-reg({id:'color',name:'Color Picker',cat:'Create',icon:'palette',desc:'Pick a color, get HEX / RGB / HSL + a 5-tint palette.',
+reg({id:'color',cat:'Create',icon:'palette',
 init:function(c){
-  c.innerHTML='<div class="panel"><label>Pick a color</label><div class="row"><div><input type="color" id="cPick" value="#c47046" style="height:52px;padding:4px;cursor:pointer"></div>'+
+  c.innerHTML='<div class="panel"><label>'+T('pickColor')+'</label><div class="row"><div><input type="color" id="cPick" value="#c47046" style="height:52px;padding:4px;cursor:pointer"></div>'+
   '<div><input type="text" id="cHex" value="#c47046"></div></div>'+
   '<div class="stat-grid"><div class="stat"><b id="cRgb" style="font-size:14px">–</b><span>RGB</span></div>'+
   '<div class="stat"><b id="cHsl" style="font-size:14px">–</b><span>HSL</span></div></div>'+
@@ -609,14 +740,13 @@ init:function(c){
   update();
 }});
 
-/* ---------- 12. Notes ---------- */
-reg({id:'notes',name:'Notes',cat:'Productivity',icon:'notes',desc:'Auto-saved notes stored only on your device.',
+reg({id:'notes',cat:'Productivity',icon:'notes',
 init:function(c){
-  c.innerHTML='<div class="panel"><textarea id="nArea" placeholder="Start typing… your note saves automatically."></textarea>'+
-  '<div class="stat-grid"><div class="stat"><b id="nWords">0</b><span>Words</span></div>'+
-  '<div class="stat"><b id="nChars">0</b><span>Characters</span></div></div>'+
-  '<div class="btn-row"><button class="btn" id="nClear">'+svgIcon('trash',16)+' Clear</button>'+
-  '<button class="btn" id="nCopy">'+svgIcon('copy',16)+' Copy</button></div></div>';
+  c.innerHTML='<div class="panel"><textarea id="nArea" placeholder="'+T('notesPh')+'"></textarea>'+
+  '<div class="stat-grid"><div class="stat"><b id="nWords">0</b><span>'+T('words')+'</span></div>'+
+  '<div class="stat"><b id="nChars">0</b><span>'+T('characters')+'</span></div></div>'+
+  '<div class="btn-row"><button class="btn" id="nClear">'+svgIcon('trash',16)+' '+T('clear')+'</button>'+
+  '<button class="btn" id="nCopy">'+svgIcon('copy',16)+' '+T('copy')+'</button></div></div>';
   var ta=$('#nArea',c);
   try{ta.value=localStorage.getItem('pt-notes')||'';}catch(e){}
   function stats(){
@@ -626,15 +756,14 @@ init:function(c){
     try{localStorage.setItem('pt-notes',t);}catch(e){}
   }
   ta.addEventListener('input',stats);
-  $('#nClear',c).addEventListener('click',function(){ta.value='';stats();toast('Note cleared');});
+  $('#nClear',c).addEventListener('click',function(){ta.value='';stats();toast(T('noteCleared'));});
   $('#nCopy',c).addEventListener('click',function(){copyText(ta.value);});
   stats();
 }});
 
-/* ---------- 13. Todo List ---------- */
-reg({id:'todo',name:'To-Do List',cat:'Productivity',icon:'check',desc:'Simple tasks, saved on your device.',
+reg({id:'todo',cat:'Productivity',icon:'check',
 init:function(c){
-  c.innerHTML='<div class="panel"><div style="display:flex;gap:10px"><input type="text" id="tdIn" placeholder="Add a task…" style="flex:1">'+
+  c.innerHTML='<div class="panel"><div style="display:flex;gap:10px"><input type="text" id="tdIn" placeholder="'+T('addTaskPh')+'" style="flex:1">'+
   '<button class="btn primary" id="tdAdd" style="padding:0 16px">'+svgIcon('plus',18)+'</button></div>'+
   '<div id="tdList" style="margin-top:10px"></div></div>';
   var list=$('#tdList',c), inp=$('#tdIn',c), items=[];
@@ -642,7 +771,7 @@ init:function(c){
   function save(){try{localStorage.setItem('pt-todo',JSON.stringify(items));}catch(e){}}
   function render(){
     list.innerHTML='';
-    if(!items.length){list.innerHTML='<p class="empty">No tasks yet — add one above.</p>';return;}
+    if(!items.length){list.innerHTML='<p class="empty">'+T('noTasks')+'</p>';return;}
     items.forEach(function(it,i){
       var row=el('<div class="todo-item'+(it.done?' done':'')+'"><div class="check">'+svgIcon('checkmark',14)+'</div><span></span><button class="del">'+svgIcon('trash',18)+'</button></div>');
       row.querySelector('span').textContent=it.text;
@@ -660,15 +789,14 @@ init:function(c){
   render();
 }});
 
-/* ---------- 14. Timer & Stopwatch ---------- */
-reg({id:'timer',name:'Timer & Stopwatch',cat:'Date & Time',icon:'timer',desc:'Countdown timer and precise stopwatch.',
+reg({id:'timer',cat:'DateTime',icon:'timer',
 init:function(c){
-  c.innerHTML='<div class="panel"><div class="tabs"><button class="active" data-tab="sw">Stopwatch</button><button data-tab="tm">Timer</button></div>'+
+  c.innerHTML='<div class="panel"><div class="tabs"><button class="active" data-tab="sw">'+T('stopwatch')+'</button><button data-tab="tm">'+T('timerTab')+'</button></div>'+
   '<div class="chrono" id="chDisp">00:00<small>.00</small></div>'+
-  '<div id="tmSet" style="display:none"><div class="row3"><div><label>Minutes</label><input type="number" id="tmMin" value="5" min="0"></div>'+
-  '<div><label>Seconds</label><input type="number" id="tmSec" value="0" min="0" max="59"></div><div></div></div></div>'+
-  '<div class="btn-row" style="justify-content:center"><button class="btn primary" id="chStart">'+svgIcon('play',16)+' Start</button>'+
-  '<button class="btn" id="chReset">Reset</button></div></div>';
+  '<div id="tmSet" style="display:none"><div class="row3"><div><label>'+T('minutes')+'</label><input type="number" id="tmMin" value="5" min="0"></div>'+
+  '<div><label>'+T('seconds')+'</label><input type="number" id="tmSec" value="0" min="0" max="59"></div><div></div></div></div>'+
+  '<div class="btn-row" style="justify-content:center"><button class="btn primary" id="chStart">'+svgIcon('play',16)+' '+T('start')+'</button>'+
+  '<button class="btn" id="chReset">'+T('reset')+'</button></div></div>';
   var disp=$('#chDisp',c), startBtn=$('#chStart',c), resetBtn=$('#chReset',c);
   var tmSet=$('#tmSet',c), tab='sw', raf=null, running=false, startTs=0, acc=0, endTs=0;
   function fmt(ms){
@@ -678,12 +806,12 @@ init:function(c){
     var str=(h>0?p(h)+':':'')+p(m)+':'+p(s)+'<small>.'+p(cs)+'</small>';
     return neg?'-'+str:str;
   }
-  function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}running=false;startBtn.innerHTML=svgIcon('play',16)+' Start';}
+  function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}running=false;startBtn.innerHTML=svgIcon('play',16)+' '+T('start');}
   function beep(){try{var ctx=new (window.AudioContext||window.webkitAudioContext)();var o=ctx.createOscillator();var g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=880;g.gain.setValueAtTime(.3,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+1);o.start();o.stop(ctx.currentTime+1);}catch(e){}}
   function loop(){
     var now=Date.now(), el;
     if(tab==='sw'){el=acc+(running?now-startTs:0);}
-    else{el=endTs-now; if(el<=0){el=0;stop();beep();toast('Time is up!');}}
+    else{el=endTs-now; if(el<=0){el=0;stop();beep();toast(T('timeUp'));}}
     disp.innerHTML=fmt(el);
     raf=requestAnimationFrame(loop);
   }
@@ -695,7 +823,7 @@ init:function(c){
       var min=parseInt($('#tmMin',c).value)||0, sec=parseInt($('#tmSec',c).value)||0;
       if(acc===0) endTs=startTs+(min*60+sec)*1000; else endTs=startTs+acc;
     }
-    startBtn.innerHTML=svgIcon('pause',16)+' Pause';
+    startBtn.innerHTML=svgIcon('pause',16)+' '+T('pause');
     startLoop();
   });
   resetBtn.addEventListener('click',function(){stop();acc=0;disp.innerHTML=fmt(0);});
@@ -710,16 +838,15 @@ init:function(c){
   disp.innerHTML=fmt(0);
 }});
 
-/* ---------- 15. Text Tools ---------- */
-reg({id:'text',name:'Text Tools',cat:'Productivity',icon:'type',desc:'Word count, case conversion, reverse & clean.',
+reg({id:'text',cat:'Productivity',icon:'type',
 init:function(c){
-  c.innerHTML='<div class="panel"><textarea id="txArea" placeholder="Paste or type your text here…"></textarea>'+
-  '<div class="stat-grid"><div class="stat"><b id="txChars">0</b><span>Characters</span></div>'+
-  '<div class="stat"><b id="txWords">0</b><span>Words</span></div>'+
-  '<div class="stat"><b id="txLines">0</b><span>Lines</span></div></div>'+
-  '<div class="btn-row"><button class="btn" data-fn="upper">UPPERCASE</button><button class="btn" data-fn="lower">lowercase</button>'+
-  '<button class="btn" data-fn="title">Title Case</button><button class="btn" data-fn="reverse">Reverse</button>'+
-  '<button class="btn" data-fn="clean">Clean Spaces</button><button class="btn" data-fn="copy">'+svgIcon('copy',16)+' Copy</button></div></div>';
+  c.innerHTML='<div class="panel"><textarea id="txArea" placeholder="'+T('textPh')+'"></textarea>'+
+  '<div class="stat-grid"><div class="stat"><b id="txChars">0</b><span>'+T('characters')+'</span></div>'+
+  '<div class="stat"><b id="txWords">0</b><span>'+T('words')+'</span></div>'+
+  '<div class="stat"><b id="txLines">0</b><span>'+T('lines')+'</span></div></div>'+
+  '<div class="btn-row"><button class="btn" data-fn="upper">'+T('upper')+'</button><button class="btn" data-fn="lower">'+T('lower')+'</button>'+
+  '<button class="btn" data-fn="title">'+T('titleCase')+'</button><button class="btn" data-fn="reverse">'+T('reverse')+'</button>'+
+  '<button class="btn" data-fn="clean">'+T('clean')+'</button><button class="btn" data-fn="copy">'+svgIcon('copy',16)+' '+T('copy')+'</button></div></div>';
   var ta=$('#txArea',c);
   function stats(){
     var t=ta.value;
@@ -742,47 +869,47 @@ init:function(c){
   });
 }});
 
-/* ---------- 16. Random Generator ---------- */
-reg({id:'random',name:'Random Generator',cat:'Fun',icon:'dice',desc:'Random number, dice roll & coin flip.',
+reg({id:'random',cat:'Fun',icon:'dice',
 init:function(c){
-  c.innerHTML='<div class="panel"><label>Random number between</label><div class="row"><div><input type="number" id="rMin" value="1"></div>'+
+  c.innerHTML='<div class="panel"><label>'+T('randBetween')+'</label><div class="row"><div><input type="number" id="rMin" value="1"></div>'+
   '<div><input type="number" id="rMax" value="100"></div></div>'+
   '<div class="result" id="rRes"><div class="big"></div><div class="sub"></div></div>'+
-  '<div class="btn-row"><button class="btn primary" id="rNum">Generate Number</button>'+
-  '<button class="btn" id="rDice">Roll Dice</button><button class="btn" id="rCoin">Flip Coin</button></div></div>';
+  '<div class="btn-row"><button class="btn primary" id="rNum">'+T('genNumber')+'</button>'+
+  '<button class="btn" id="rDice">'+T('rollDice')+'</button><button class="btn" id="rCoin">'+T('flipCoin')+'</button></div></div>';
   var res=$('#rRes',c);
   $('#rNum',c).addEventListener('click',function(){
     var a=parseInt($('#rMin',c).value), b=parseInt($('#rMax',c).value);
-    if(isNaN(a)||isNaN(b)||b<=a){toast('Enter valid min/max');return;}
-    showResult(res, String(Math.floor(Math.random()*(b-a+1))+a), 'Random between '+a+' and '+b);
+    if(isNaN(a)||isNaN(b)||b<=a){toast(T('invalidRange'));return;}
+    showResult(res, String(Math.floor(Math.random()*(b-a+1))+a), T('randBetweenSub').replace('{a}',a).replace('{b}',b));
   });
   $('#rDice',c).addEventListener('click',function(){
     var d1=Math.floor(Math.random()*6)+1, d2=Math.floor(Math.random()*6)+1;
-    showResult(res, d1+' + '+d2+' = '+(d1+d2), 'Two dice rolled');
+    showResult(res, d1+' + '+d2+' = '+(d1+d2), T('diceRolled'));
   });
   $('#rCoin',c).addEventListener('click',function(){
-    showResult(res, Math.random()<0.5?'HEADS':'TAILS', 'Coin flipped');
+    showResult(res, Math.random()<0.5?T('heads'):T('tails'), T('coinFlipped'));
   });
 }});
 
-/* ================= navigation & home grid ================= */
 var homeView=$('#homeView'), toolView=$('#toolView'), toolBody=$('#toolBody');
-var pageTitle=$('#pageTitle'), pageSub=$('#pageSub'), toolTitle=$('#toolTitle'), toolDesc=$('#toolDesc');
+var toolTitle=$('#toolTitle'), toolDesc=$('#toolDesc');
 var gridWrap=$('#toolGridWrap'), search=$('#search');
+var currentView='home';
 
 function renderHome(filter){
   gridWrap.innerHTML='';
   var cats={};
   TOOLS.forEach(function(t){
-    if(filter && (t.name+' '+t.cat+' '+t.desc).toLowerCase().indexOf(filter.toLowerCase())===-1) return;
+    var hay=(T('n_'+t.id)+' '+T('cat_'+t.cat)+' '+T('d_'+t.id)).toLowerCase();
+    if(filter && hay.indexOf(filter.toLowerCase())===-1) return;
     (cats[t.cat]=cats[t.cat]||[]).push(t);
   });
-  if(!Object.keys(cats).length){gridWrap.innerHTML='<p class="empty">No tools match “'+filter+'”.</p>';return;}
+  if(!Object.keys(cats).length){gridWrap.innerHTML='<p class="empty">'+T('noMatch')+' “'+filter+'”.</p>';return;}
   Object.keys(cats).sort().forEach(function(cat){
-    var lab=el('<div class="cat-label">'+cat+'</div>'); gridWrap.appendChild(lab);
+    var lab=el('<div class="cat-label">'+T('cat_'+cat)+'</div>'); gridWrap.appendChild(lab);
     var grid=el('<div class="tool-grid"></div>');
     cats[cat].forEach(function(t){
-      var card=el('<button class="tool-card"><div class="ticon">'+svgIcon(t.icon,22)+'</div><h3>'+t.name+'</h3><p>'+t.desc.split('.')[0]+'.</p></button>');
+      var card=el('<button class="tool-card"><div class="ticon">'+svgIcon(t.icon,22)+'</div><h3>'+T('n_'+t.id)+'</h3><p>'+T('d_'+t.id).split('.')[0]+'.</p></button>');
       card.addEventListener('click',function(){go(t.id);});
       grid.appendChild(card);
     });
@@ -791,29 +918,31 @@ function renderHome(filter){
 }
 search.addEventListener('input',function(){renderHome(this.value);});
 
+function openTool(t, skipAd){
+  if(!skipAd) AdmobHooks.maybeInterstitial();
+  homeView.style.display='none'; toolView.style.display='block';
+  backBtn.style.display='grid';
+  toolTitle.textContent=T('n_'+t.id); toolDesc.textContent=T('d_'+t.id);
+  toolBody.innerHTML='';
+  t.init(toolBody);
+  window.scrollTo(0,0);
+}
 function go(id){
   if(id==='home'){
+    currentView='home';
     homeView.style.display='block'; toolView.style.display='none';
     backBtn.style.display='none';
-    pageTitle.textContent='Pocket Tools'; pageSub.textContent='16 tools · works offline';
     window.scrollTo(0,0); return;
   }
   var t=TOOLS.find(function(x){return x.id===id;});
   if(!t) return;
-  AdmobHooks.maybeInterstitial();
-  homeView.style.display='none'; toolView.style.display='block';
-  backBtn.style.display='grid';
-  pageTitle.textContent=t.name; pageSub.textContent=t.cat;
-  toolTitle.textContent=t.name; toolDesc.textContent=t.desc;
-  toolBody.innerHTML='';
-  t.init(toolBody);
-  window.scrollTo(0,0);
+  currentView=id;
+  openTool(t,false);
 }
 backBtn.addEventListener('click',function(){go('home');});
 
 renderHome();
 
-/* ================= service worker (offline) — optional, needs sw.js in repo ================= */
 if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
   navigator.serviceWorker.register('sw.js').catch(function(){});
 }
