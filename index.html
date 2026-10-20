@@ -3,74 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Radio Maroc — Live & Gratuite</title>
+    <title>Maroc One — Radio • TV • Services</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
         body { background: #0f172a; color: white; min-height: 100vh; padding-bottom: 80px; }
         
-        header { background: linear-gradient(90deg, #2563eb, #4f46e5); padding: 1.5rem; text-align: center; }
+        header { background: linear-gradient(90deg, #2563eb, #4f46e5); padding: 1.25rem; text-align: center; }
         header h1 { font-size: 1.4rem; }
         header p { opacity: 0.85; font-size: 0.9rem; margin-top: 0.25rem; }
         
-        .station { 
-            background: #1e293b; margin: 0.75rem 1rem; padding: 1.25rem; 
+        .tabs { display: flex; background: #1e293b; position: sticky; top: 0; z-index: 10; }
+        .tab { flex: 1; padding: 0.85rem; text-align: center; border: none; background: transparent; color: #94a3b8; font-size: 0.9rem; cursor: pointer; border-bottom: 3px solid transparent; }
+        .tab.active { color: white; border-bottom-color: #2563eb; background: #0f172a; }
+        
+        .section { display: none; padding: 1rem; }
+        .section.active { display: block; }
+        
+        .item { 
+            background: #1e293b; margin-bottom: 0.75rem; padding: 1.15rem; 
             border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
             cursor: pointer; transition: all 0.2s; border: 2px solid transparent;
         }
-        .station:hover { background: #334155; transform: scale(1.01); }
-        .station.playing { border-color: #3b82f6; background: #1e3a5f; }
-        .station-info h3 { font-size: 1.1rem; margin-bottom: 0.3rem; }
-        .station-info p { font-size: 0.85rem; color: #94a3b8; }
+        .item:hover { background: #334155; transform: scale(1.01); }
+        .item.playing { border-color: #3b82f6; background: #1e3a5f; }
+        .item-info h3 { font-size: 1rem; margin-bottom: 0.2rem; }
+        .item-info p { font-size: 0.8rem; color: #94a3b8; }
         .play-btn { 
-            width: 48px; height: 48px; border-radius: 50%; background: #2563eb; 
-            border: none; color: white; font-size: 1.2rem; cursor: pointer; flex-shrink: 0;
+            width: 44px; height: 44px; border-radius: 50%; background: #2563eb; 
+            border: none; color: white; font-size: 1rem; cursor: pointer; flex-shrink: 0;
         }
         
-        .features {
-            background: #1e293b; margin: 1rem; padding: 1rem; border-radius: 10px;
+        .service-card {
+            background: #1e293b; margin-bottom: 0.75rem; padding: 1.25rem; border-radius: 12px;
+            display: block; text-decoration: none; color: white;
         }
-        .features h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #93c5fd; }
-        .features ul { margin-left: 1.25rem; font-size: 0.85rem; color: #cbd5e1; }
-        .features li { margin-bottom: 0.25rem; }
+        .service-card h3 { font-size: 1rem; margin-bottom: 0.3rem; color: #93c5fd; }
+        .service-card p { font-size: 0.85rem; color: #94a3b8; }
+        
+        .video-container {
+            background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 1rem; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; color: #94a3b8;
+        }
         
         .now-playing {
             position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b;
-            padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between;
+            padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between;
             border-top: 1px solid #334155;
         }
-        .now-playing p { font-size: 0.85rem; color: #94a3b8; }
-        .now-playing .station-name { color: white; font-weight: 600; font-size: 1rem; }
-        .controls { display: flex; gap: 0.6rem; }
-        .ctrl-btn { background: #2563eb; border: none; color: white; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 1rem; }
+        .now-playing p { font-size: 0.8rem; color: #94a3b8; }
+        .now-playing .name { color: white; font-weight: 600; font-size: 0.9rem; }
+        .controls { display: flex; gap: 0.5rem; }
+        .ctrl-btn { background: #2563eb; border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1rem; }
         
         .admob-banner { position: fixed; bottom: 60px; left: 0; right: 0; height: 50px; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8; }
     </style>
 </head>
 <body>
     <header>
-        <h1>📻 Radio Maroc</h1>
-        <p>7 stations — 100% fonctionnelles • Gratuite • Légère</p>
+        <h1>🇲🇦 Maroc One</h1>
+        <p>Radio • TV • Services — Tout en une seule app</p>
     </header>
 
-    <div class="features">
-        <h3>✨ Pourquoi cette application ?</h3>
-        <ul>
-            <li>✅ Toutes les stations fonctionnent — pas de liens cassés</li>
-            <li>⚡ Très rapide — ne consomme presque pas de données</li>
-            <li>🔊 Lecture en arrière-plan — continuez à utiliser votre téléphone</li>
-            <li>💤 Mode veille — arrêt automatique après 15/30/60 min</li>
-            <li>⭐ Vos préférées — bientôt disponible</li>
-        </ul>
+    <div class="tabs">
+        <button class="tab active" data-section="radio">📻 Radio</button>
+        <button class="tab" data-section="tv">📺 TV</button>
+        <button class="tab" data-section="services">🛠️ Services</button>
     </div>
 
-    <div id="stations"></div>
+    <div class="admob-banner">Publicité — AdMob</div>
 
-    <div class="admob-banner">Publicité</div>
+    <!-- RADIO SECTION -->
+    <div class="section active" id="radio">
+        <div id="radioList"></div>
+    </div>
+
+    <!-- TV SECTION -->
+    <div class="section" id="tv">
+        <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:1rem;">Chaînes nationales & généralistes</p>
+        <div class="item" onclick="openTV('snrt')">
+            <div class="item-info">
+                <h3>📺 SNRT — Al Aoula</h3>
+                <p>Chaîne nationale 1</p>
+            </div>
+            <button class="play-btn">▶</button>
+        </div>
+        <div class="item" onclick="openTV('2m')">
+            <div class="item-info">
+                <h3>📺 2M — Chaîne Générale</h3>
+                <p>Programmes, divertissement, actualités</p>
+            </div>
+            <button class="play-btn">▶</button>
+        </div>
+        <div class="item" onclick="openTV('mediasat')">
+            <div class="item-info">
+                <h3>📺 Medi 1 TV</h3>
+                <p>Actualités & débats internationaux</p>
+            </div>
+            <button class="play-btn">▶</button>
+        </div>
+        <p style="color:#94a3b8; font-size:0.75rem; margin-top:1rem;">💡 Les chaînes s'ouvrent dans leur lecteur officiel</p>
+    </div>
+
+    <!-- SERVICES SECTION -->
+    <div class="section" id="services">
+        <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:1rem;">Outils utiles au quotidien</p>
+        
+        <a href="https://timesprayer.com/fr/" target="_blank" class="service-card">
+            <h3>🕌 Heures de Prière</h3>
+            <p>Horaires précis pour votre ville — mise à jour quotidienne</p>
+        </a>
+        
+        <a href="https://www.xe.com/currencyconverter/convert/?From=USD&To=MAD" target="_blank" class="service-card">
+            <h3>💰 Convertisseur MAD</h3>
+            <p>Dhamm ↔ Euro, Dollar — taux en temps réel</p>
+        </a>
+        
+        <a href="https://www.accuweather.com/ma" target="_blank" class="service-card">
+            <h3>🌤️ Météo</h3>
+            <p>Prévisions à 7 jours pour toutes les villes du Maroc</p>
+        </a>
+        
+        <a href="https://www.maroc.ma/fr" target="_blank" class="service-card">
+            <h3>📋 Services Administratifs</h3>
+            <p>Liens officiels — cartes, documents, démarches en ligne</p>
+        </a>
+    </div>
 
     <div class="now-playing">
         <div>
-            <p>En cours de lecture</p>
-            <p class="station-name" id="nowPlayingName">Aucune station</p>
+            <p>En cours</p>
+            <p class="name" id="nowPlayingName">Aucune sélection</p>
         </div>
         <div class="controls">
             <button class="ctrl-btn" id="playPauseBtn">▶</button>
@@ -81,36 +142,44 @@
     <audio id="radioPlayer">
 
     <script>
+        // -------- TABS SYSTEM --------
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.section).classList.add('active');
+            });
+        });
+
+        // -------- RADIO STATIONS (3 working) --------
         const stations = [
             { name: "🎵 Hit Radio", genre: "Musique / Hits", url: "https://hitradio-maroc.ice.infomaniak.ch/hitradio-maroc-128.mp3" },
             { name: "⚽ Radio Mars", genre: "Sport / Musique", url: "https://radiomars.ice.infomaniak.ch/radiomars-128.mp3" },
-            { name: "📻 Med Radio", genre: "Généraliste", url: "https://medradio.ice.infomaniak.ch/medradio-128.mp3" },
-            { name: "💃 Chada FM", genre: "Musique / Divertissement", url: "https://chadafm.ice.infomaniak.ch/chadafm-128.mp3" },
-            { name: "🎶 MFM Radio", genre: "Musique / Variétés", url: "https://mfmradio.ice.infomaniak.ch/mfmradio-128.mp3" },
-            { name: "🌟 Atlantic Radio", genre: "Musique / Pop", url: "https://atlantic.ice.infomaniak.ch/atlantic-128.mp3" },
-            { name: "🎤 Cap Radio", genre: "Régional / Culturel", url: "https://capradio.ice.infomaniak.ch/capradio-128.mp3" }
+            { name: "📻 Med Radio", genre: "Généraliste", url: "https://medradio.ice.infomaniak.ch/medradio-128.mp3" }
         ];
 
         const player = document.getElementById('radioPlayer');
         const nowPlayingName = document.getElementById('nowPlayingName');
         const playPauseBtn = document.getElementById('playPauseBtn');
         const stopBtn = document.getElementById('stopBtn');
-        const stationsDiv = document.getElementById('stations');
+        const radioList = document.getElementById('radioList');
         let currentIndex = -1;
         let isPlaying = false;
 
+        // Render radio list
         stations.forEach((s, i) => {
             const div = document.createElement('div');
-            div.className = 'station';
+            div.className = 'item';
             div.innerHTML = `
-                <div class="station-info">
+                <div class="item-info">
                     <h3>${s.name}</h3>
                     <p>${s.genre}</p>
                 </div>
                 <button class="play-btn">▶</button>
             `;
             div.addEventListener('click', () => playStation(i));
-            stationsDiv.appendChild(div);
+            radioList.appendChild(div);
         });
 
         function playStation(i) {
@@ -120,7 +189,7 @@
             isPlaying = true;
             nowPlayingName.textContent = stations[i].name;
             playPauseBtn.textContent = '⏸';
-            document.querySelectorAll('.station').forEach((el, idx) => {
+            document.querySelectorAll('#radioList .item').forEach((el, idx) => {
                 el.classList.toggle('playing', idx === i);
             });
         }
@@ -137,10 +206,20 @@
             player.src = '';
             isPlaying = false;
             currentIndex = -1;
-            nowPlayingName.textContent = 'Aucune station';
+            nowPlayingName.textContent = 'Aucune sélection';
             playPauseBtn.textContent = '▶';
-            document.querySelectorAll('.station').forEach(el => el.classList.remove('playing'));
+            document.querySelectorAll('.item').forEach(el => el.classList.remove('playing'));
         });
+
+        // -------- TV OPENERS --------
+        function openTV(channel) {
+            const links = {
+                snrt: "https://www.snrt.ma/fr/direct/al-aoula",
+                "2m": "https://www.2m.ma/direct",
+                mediasat: "https://www.medi1tv.com/fr/direct"
+            };
+            window.open(links[channel], '_blank');
+        }
     </script>
 </body>
 </html>
