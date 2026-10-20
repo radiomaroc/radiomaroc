@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Maroc — Toutes les Stations</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background: #0f172a; color: white; min-height: 100vh; padding-bottom: 80px; }
+        
+        header { background: linear-gradient(90deg, #2563eb, #4f46e5); padding: 1.5rem; text-align: center; }
+        header h1 { font-size: 1.4rem; }
+        header p { opacity: 0.85; font-size: 0.9rem; margin-top: 0.25rem; }
+        
+        .station { 
+            background: #1e293b; margin: 0.75rem 1rem; padding: 1rem 1.25rem; 
+            border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: background 0.2s; border: 2px solid transparent;
+        }
+        .station:hover { background: #334155; }
+        .station.playing { border-color: #3b82f6; background: #1e3a5f; }
+        .station-info h3 { font-size: 1rem; margin-bottom: 0.2rem; }
+        .station-info p { font-size: 0.8rem; color: #94a3b8; }
+        .play-btn { 
+            width: 44px; height: 44px; border-radius: 50%; background: #2563eb; 
+            border: none; color: white; font-size: 1.1rem; cursor: pointer; flex-shrink: 0;
+        }
+        
+        .now-playing {
+            position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b;
+            padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between;
+            border-top: 1px solid #334155;
+        }
+        .now-playing p { font-size: 0.85rem; color: #94a3b8; }
+        .now-playing .station-name { color: white; font-weight: 600; }
+        .controls { display: flex; gap: 0.5rem; }
+        .ctrl-btn { background: #2563eb; border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1rem; }
+        
+        .admob-banner { position: fixed; bottom: 60px; left: 0; right: 0; height: 50px; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📻 Radio Maroc</h1>
+        <p>Toutes vos stations préférées en un seul endroit</p>
+    </header>
+
+    <div id="stations"></div>
+
+    <div class="admob-banner">Publicité — AdMob Banner</div>
+
+    <div class="now-playing">
+        <div>
+            <p>En cours de lecture</p>
+            <p class="station-name" id="nowPlayingName">Aucune station</p>
+        </div>
+        <div class="controls">
+            <button class="ctrl-btn" id="playPauseBtn">▶</button>
+            <button class="ctrl-btn" id="stopBtn">⏹</button>
+        </div>
+    </div>
+
+    <audio id="radioPlayer"></audio>
+
+    <script>
+        const stations = [
+            { name: "🎵 Hit Radio", genre: "Musique / Hits", url: "https://hitradio.streaming-pro.com/" },
+            { name: "🎶 Radio 2M", genre: "Général / Musique", url: "https://icecast.radiofrance.fr/franceinter-midfi.mp3" },
+            { name: "📰 Medi1 Radio", genre: "Actualités / Talk", url: "https://medi1.radioca.st/stream" },
+            { name: "💃 Chada FM", genre: "Musique / Divertissement", url: "https://chadafm.radioca.st/stream" },
+            { name: "📻 SNRT National", genre: "National", url: "https://snrtlive.akamaized.net/snrt/radio1/playlist.m3u8" },
+            { name: "🌟 Atlantic Radio", genre: "Musique / Pop", url: "https://atlanticradio.radioca.st/stream" },
+            { name: "🎤 Radio Aswat", genre: "Culturel", url: "https://aswat.radioca.st/stream" },
+            { name: "🕌 Radio Quran", genre: "Religieux", url: "https://quranradio.irib.ir/live/128.mp3" }
+        ];
+
+        const player = document.getElementById('radioPlayer');
+        const nowPlayingName = document.getElementById('nowPlayingName');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const stationsDiv = document.getElementById('stations');
+        let currentIndex = -1;
+        let isPlaying = false;
+
+        stations.forEach((s, i) => {
+            const div = document.createElement('div');
+            div.className = 'station';
+            div.innerHTML = `
+                <div class="station-info">
+                    <h3>${s.name}</h3>
+                    <p>${s.genre}</p>
+                </div>
+                <button class="play-btn">▶</button>
+            `;
+            div.addEventListener('click', () => playStation(i));
+            stationsDiv.appendChild(div);
+        });
+
+        function playStation(i) {
+            currentIndex = i;
+            player.src = stations[i].url;
+            player.play();
+            isPlaying = true;
+            nowPlayingName.textContent = stations[i].name;
+            playPauseBtn.textContent = '⏸';
+            document.querySelectorAll('.station').forEach((el, idx) => {
+                el.classList.toggle('playing', idx === i);
+            });
+        }
+
+        playPauseBtn.addEventListener('click', () => {
+            if (currentIndex === -1) return;
+            if (isPlaying) { player.pause(); playPauseBtn.textContent = '▶'; }
+            else { player.play(); playPauseBtn.textContent = '⏸'; }
+            isPlaying = !isPlaying;
+        });
+
+        stopBtn.addEventListener('click', () => {
+            player.pause();
+            player.src = '';
+            isPlaying = false;
+            currentIndex = -1;
+            nowPlayingName.textContent = 'Aucune station';
+            playPauseBtn.textContent = '▶';
+            document.querySelectorAll('.station').forEach(el => el.classList.remove('playing'));
+        });
+    </script>
+</body>
+</html>
