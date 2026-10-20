@@ -1,0 +1,26 @@
+{
+  "name": "Pocket Tools — 16 Tools in One",
+  "short_name": "Pocket Tools",
+  "description": "16 everyday tools in one free app: calculator, unit converter, BMI, password generator, QR maker, notes, todo, timer and more. Works offline.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#202024",
+  "theme_color": "#202024",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

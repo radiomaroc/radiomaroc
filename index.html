@@ -1,225 +1,823 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maroc One — Radio • TV • Services</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background: #0f172a; color: white; min-height: 100vh; padding-bottom: 80px; }
-        
-        header { background: linear-gradient(90deg, #2563eb, #4f46e5); padding: 1.25rem; text-align: center; }
-        header h1 { font-size: 1.4rem; }
-        header p { opacity: 0.85; font-size: 0.9rem; margin-top: 0.25rem; }
-        
-        .tabs { display: flex; background: #1e293b; position: sticky; top: 0; z-index: 10; }
-        .tab { flex: 1; padding: 0.85rem; text-align: center; border: none; background: transparent; color: #94a3b8; font-size: 0.9rem; cursor: pointer; border-bottom: 3px solid transparent; }
-        .tab.active { color: white; border-bottom-color: #2563eb; background: #0f172a; }
-        
-        .section { display: none; padding: 1rem; }
-        .section.active { display: block; }
-        
-        .item { 
-            background: #1e293b; margin-bottom: 0.75rem; padding: 1.15rem; 
-            border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
-            cursor: pointer; transition: all 0.2s; border: 2px solid transparent;
-        }
-        .item:hover { background: #334155; transform: scale(1.01); }
-        .item.playing { border-color: #3b82f6; background: #1e3a5f; }
-        .item-info h3 { font-size: 1rem; margin-bottom: 0.2rem; }
-        .item-info p { font-size: 0.8rem; color: #94a3b8; }
-        .play-btn { 
-            width: 44px; height: 44px; border-radius: 50%; background: #2563eb; 
-            border: none; color: white; font-size: 1rem; cursor: pointer; flex-shrink: 0;
-        }
-        
-        .service-card {
-            background: #1e293b; margin-bottom: 0.75rem; padding: 1.25rem; border-radius: 12px;
-            display: block; text-decoration: none; color: white;
-        }
-        .service-card h3 { font-size: 1rem; margin-bottom: 0.3rem; color: #93c5fd; }
-        .service-card p { font-size: 0.85rem; color: #94a3b8; }
-        
-        .video-container {
-            background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 1rem; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; color: #94a3b8;
-        }
-        
-        .now-playing {
-            position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b;
-            padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between;
-            border-top: 1px solid #334155;
-        }
-        .now-playing p { font-size: 0.8rem; color: #94a3b8; }
-        .now-playing .name { color: white; font-weight: 600; font-size: 0.9rem; }
-        .controls { display: flex; gap: 0.5rem; }
-        .ctrl-btn { background: #2563eb; border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1rem; }
-        
-        .admob-banner { position: fixed; bottom: 60px; left: 0; right: 0; height: 50px; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#202024">
+<meta name="description" content="Pocket Tools — 16 everyday tools in one free app: calculator, converter, BMI, password generator, QR maker, notes, todo, timer and more.">
+<title>Pocket Tools — 16 Tools in One</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23c47046'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23202024' font-family='sans-serif' font-weight='bold'%3EP%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- QR library (only used by the QR tool; everything else works fully offline) -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<style>
+  :root{
+    --bg:#202024; --card:#2a2a2f; --text:#e8e5df; --muted:#9a978f;
+    --accent:#c47046; --accent-soft:rgba(196,112,70,.14);
+    --accent2:#7ba8b8; --accent2-soft:rgba(123,168,184,.14);
+    --border:rgba(232,229,223,.12);
+    --shadow:0 6px 24px rgba(0,0,0,.35);
+  }
+  [data-theme="light"]{
+    --bg:#f4f2ee; --card:#ffffff; --text:#1c1a17; --muted:#6b6760;
+    --accent-soft:rgba(196,112,70,.12); --accent2-soft:rgba(123,168,184,.16);
+    --border:rgba(28,26,23,.10); --shadow:0 6px 24px rgba(28,26,23,.08);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Sora',system-ui,-apple-system,sans-serif;
+    background:var(--bg); color:var(--text);
+    min-height:100vh; line-height:1.5;
+    transition:background .3s,color .3s;
+  }
+  .app{max-width:880px;margin:0 auto;padding:0 16px 120px}
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:20;
+    display:flex; align-items:center; gap:12px;
+    padding:14px 0; margin:0 -16px; padding-left:16px; padding-right:16px;
+    background:color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  .brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+  .logo{
+    width:38px;height:38px;border-radius:11px;flex:none;
+    background:linear-gradient(135deg,var(--accent),#e0926b);
+    display:grid;place-items:center;color:#202024;font-weight:700;font-size:20px;
+    box-shadow:0 4px 14px rgba(196,112,70,.35);
+  }
+  .brand h1{font-size:18px;margin:0;font-weight:700;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand small{display:block;font-size:11px;color:var(--muted);font-weight:500}
+  .icon-btn{
+    width:40px;height:40px;border-radius:12px;flex:none;cursor:pointer;
+    background:var(--card); border:1px solid var(--border); color:var(--text);
+    display:grid;place-items:center; transition:transform .15s, border-color .2s;
+  }
+  .icon-btn:active{transform:scale(.92)}
+  .icon-btn:hover{border-color:var(--accent)}
+  .icon-btn svg{width:20px;height:20px}
+  #backBtn{display:none}
+  /* ---------- home ---------- */
+  .search-wrap{position:relative;margin:20px 0 6px}
+  .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+  #search{
+    width:100%; padding:14px 14px 14px 44px; border-radius:14px;
+    background:var(--card); border:1px solid var(--border); color:var(--text);
+    font-family:inherit; font-size:15px; outline:none; transition:border-color .2s;
+  }
+  #search:focus{border-color:var(--accent)}
+  .cat-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin:22px 4px 10px;font-weight:600}
+  .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}
+  .tool-card{
+    background:var(--card); border:1px solid var(--border); border-radius:18px;
+    padding:18px 14px; cursor:pointer; text-align:left; font-family:inherit; color:var(--text);
+    transition:transform .18s, border-color .2s, box-shadow .2s;
+  }
+  .tool-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:var(--shadow)}
+  .tool-card .ticon{
+    width:44px;height:44px;border-radius:13px;margin-bottom:12px;
+    background:var(--accent-soft); color:var(--accent); display:grid;place-items:center;
+  }
+  .tool-card .ticon svg{width:22px;height:22px}
+  .tool-card h3{margin:0;font-size:14.5px;font-weight:600}
+  .tool-card p{margin:3px 0 0;font-size:11.5px;color:var(--muted)}
+  /* ---------- tool view ---------- */
+  #toolView{display:none;animation:fadeUp .25s ease}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .tool-head{margin:22px 0 18px}
+  .tool-head h2{margin:0 0 4px;font-size:24px;font-weight:700;letter-spacing:-.4px}
+  .tool-head p{margin:0;color:var(--muted);font-size:13px}
+  .panel{
+    background:var(--card); border:1px solid var(--border); border-radius:18px;
+    padding:20px; margin-bottom:14px;
+  }
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:14px 0 6px}
+  label:first-child{margin-top:0}
+  input[type=number],input[type=text],input[type=date],input[type=password],select,textarea{
+    width:100%; padding:13px 14px; border-radius:12px; font-family:inherit; font-size:15px;
+    background:var(--bg); border:1px solid var(--border); color:var(--text); outline:none;
+    transition:border-color .2s;
+  }
+  input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+  textarea{resize:vertical;min-height:110px;line-height:1.55}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  @media(max-width:520px){.row3{grid-template-columns:1fr 1fr}}
+  .btn{
+    padding:13px 18px; border-radius:12px; font-family:inherit; font-size:14.5px; font-weight:600;
+    cursor:pointer; border:1px solid var(--border); background:var(--card); color:var(--text);
+    transition:transform .12s, opacity .2s; display:inline-flex; align-items:center; gap:8px; justify-content:center;
+  }
+  .btn:active{transform:scale(.96)}
+  .btn.primary{background:var(--accent-soft);border-color:var(--accent);color:var(--text)}
+  .btn.primary:hover{background:color-mix(in srgb, var(--accent) 22%, transparent)}
+  .btn svg{width:17px;height:17px}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .result{
+    background:var(--accent2-soft); border:1px solid color-mix(in srgb, var(--accent2) 40%, transparent);
+    border-radius:14px; padding:16px 18px; margin-top:16px; display:none;
+  }
+  .result.show{display:block;animation:fadeUp .25s ease}
+  .result .big{font-size:26px;font-weight:700;letter-spacing:-.3px;color:var(--text);word-break:break-all}
+  .result .sub{font-size:13px;color:var(--muted);margin-top:4px}
+  .pill{
+    display:inline-block; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:600;
+    background:var(--accent-soft); color:var(--accent); border:1px solid var(--accent); margin-top:8px;
+  }
+  /* ---------- calculator ---------- */
+  .calc-display{
+    background:var(--bg); border:1px solid var(--border); border-radius:14px;
+    padding:18px 16px; text-align:right; font-size:30px; font-weight:600;
+    min-height:72px; word-break:break-all; margin-bottom:14px; font-variant-numeric:tabular-nums;
+  }
+  .calc-keys{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .calc-keys button{
+    padding:16px 0; border-radius:12px; font-family:inherit; font-size:18px; font-weight:600;
+    background:var(--bg); border:1px solid var(--border); color:var(--text); cursor:pointer;
+    transition:transform .1s, background .15s;
+  }
+  .calc-keys button:active{transform:scale(.94)}
+  .calc-keys button.op{color:var(--accent)}
+  .calc-keys button.eq{background:var(--accent);border-color:var(--accent);color:#202024}
+  .calc-keys button.fn{color:var(--accent2)}
+  /* ---------- timer ---------- */
+  .tabs{display:flex;gap:8px;margin-bottom:16px;background:var(--bg);padding:5px;border-radius:12px;border:1px solid var(--border)}
+  .tabs button{flex:1;padding:10px;border:none;background:transparent;color:var(--muted);font-family:inherit;font-weight:600;font-size:13.5px;border-radius:9px;cursor:pointer}
+  .tabs button.active{background:var(--card);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+  .chrono{font-size:52px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:-1px;margin:14px 0}
+  .chrono small{font-size:26px;color:var(--muted)}
+  /* ---------- todo ---------- */
+  .todo-item{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--border)}
+  .todo-item:last-child{border-bottom:none}
+  .todo-item.done span{text-decoration:line-through;color:var(--muted)}
+  .todo-item span{flex:1;font-size:14.5px;word-break:break-word}
+  .check{width:24px;height:24px;border-radius:8px;border:2px solid var(--border);cursor:pointer;flex:none;display:grid;place-items:center;color:transparent}
+  .todo-item.done .check{background:var(--accent);border-color:var(--accent);color:#202024}
+  .del{background:none;border:none;color:var(--muted);cursor:pointer;padding:6px}
+  .del svg{width:18px;height:18px}
+  .del:hover{color:#e05555}
+  /* ---------- color tool ---------- */
+  .swatch-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}
+  .swatch{height:56px;border-radius:10px;border:1px solid var(--border);cursor:pointer;position:relative}
+  .swatch span{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9.5px;font-weight:600;background:rgba(0,0,0,.35);color:#fff;padding:2px 0;border-radius:0 0 9px 9px}
+  /* ---------- misc ---------- */
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-top:14px}
+  .stat{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+  .stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+  .stat span{font-size:11px;color:var(--muted)}
+  .checkline{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:14px;cursor:pointer}
+  .checkline input{width:18px;height:18px;accent-color:var(--accent)}
+  input[type=range]{width:100%;accent-color:var(--accent)}
+  #qrOut{text-align:center;margin-top:16px}
+  #qrOut img{max-width:220px;background:#fff;padding:12px;border-radius:12px}
+  .footer{text-align:center;color:var(--muted);font-size:11.5px;margin-top:36px;padding-top:20px;border-top:1px solid var(--border)}
+  /* AdMob banner slot — stays hidden until you wire the native ad SDK after wrapping to Android */
+  #admob-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:30;min-height:50px;background:var(--card);border-top:1px solid var(--border)}
+  .toast{
+    position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--text);color:var(--bg);padding:10px 20px;border-radius:999px;font-size:13px;font-weight:600;
+    opacity:0;pointer-events:none;transition:all .3s;z-index:50;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .empty{text-align:center;color:var(--muted);padding:30px;font-size:14px}
+</style>
 </head>
 <body>
-    <header>
-        <h1>🇲🇦 Maroc One</h1>
-        <p>Radio • TV • Services — Tout en une seule app</p>
-    </header>
-
-    <div class="tabs">
-        <button class="tab active" data-section="radio">📻 Radio</button>
-        <button class="tab" data-section="tv">📺 TV</button>
-        <button class="tab" data-section="services">🛠️ Services</button>
+<div class="app">
+  <header>
+    <button class="icon-btn" id="backBtn" aria-label="Back"></button>
+    <div class="brand">
+      <div class="logo">P</div>
+      <div>
+        <h1 id="pageTitle">Pocket Tools</h1>
+        <small id="pageSub">16 tools · works offline</small>
+      </div>
     </div>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle theme"></button>
+  </header>
 
-    <div class="admob-banner">Publicité — AdMob</div>
-
-    <!-- RADIO SECTION -->
-    <div class="section active" id="radio">
-        <div id="radioList"></div>
+  <div id="homeView">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      <input id="search" type="text" placeholder="Search tools…" autocomplete="off">
     </div>
+    <div id="toolGridWrap"></div>
+  </div>
 
-    <!-- TV SECTION -->
-    <div class="section" id="tv">
-        <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:1rem;">Chaînes nationales & généralistes</p>
-        <div class="item" onclick="openTV('snrt')">
-            <div class="item-info">
-                <h3>📺 SNRT — Al Aoula</h3>
-                <p>Chaîne nationale 1</p>
-            </div>
-            <button class="play-btn">▶</button>
-        </div>
-        <div class="item" onclick="openTV('2m')">
-            <div class="item-info">
-                <h3>📺 2M — Chaîne Générale</h3>
-                <p>Programmes, divertissement, actualités</p>
-            </div>
-            <button class="play-btn">▶</button>
-        </div>
-        <div class="item" onclick="openTV('mediasat')">
-            <div class="item-info">
-                <h3>📺 Medi 1 TV</h3>
-                <p>Actualités & débats internationaux</p>
-            </div>
-            <button class="play-btn">▶</button>
-        </div>
-        <p style="color:#94a3b8; font-size:0.75rem; margin-top:1rem;">💡 Les chaînes s'ouvrent dans leur lecteur officiel</p>
+  <div id="toolView">
+    <div class="tool-head">
+      <h2 id="toolTitle"></h2>
+      <p id="toolDesc"></p>
     </div>
+    <div id="toolBody"></div>
+  </div>
 
-    <!-- SERVICES SECTION -->
-    <div class="section" id="services">
-        <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:1rem;">Outils utiles au quotidien</p>
-        
-        <a href="https://timesprayer.com/fr/" target="_blank" class="service-card">
-            <h3>🕌 Heures de Prière</h3>
-            <p>Horaires précis pour votre ville — mise à jour quotidienne</p>
-        </a>
-        
-        <a href="https://www.xe.com/currencyconverter/convert/?From=USD&To=MAD" target="_blank" class="service-card">
-            <h3>💰 Convertisseur MAD</h3>
-            <p>Dhamm ↔ Euro, Dollar — taux en temps réel</p>
-        </a>
-        
-        <a href="https://www.accuweather.com/ma" target="_blank" class="service-card">
-            <h3>🌤️ Météo</h3>
-            <p>Prévisions à 7 jours pour toutes les villes du Maroc</p>
-        </a>
-        
-        <a href="https://www.maroc.ma/fr" target="_blank" class="service-card">
-            <h3>📋 Services Administratifs</h3>
-            <p>Liens officiels — cartes, documents, démarches en ligne</p>
-        </a>
-    </div>
+  <div class="footer">Pocket Tools · free forever · your data stays on this device</div>
+</div>
 
-    <div class="now-playing">
-        <div>
-            <p>En cours</p>
-            <p class="name" id="nowPlayingName">Aucune sélection</p>
-        </div>
-        <div class="controls">
-            <button class="ctrl-btn" id="playPauseBtn">▶</button>
-            <button class="ctrl-btn" id="stopBtn">⏹</button>
-        </div>
-    </div>
+<!-- AdMob banner placeholder. When wrapped with Capacitor/Median, the native SDK fills this div. -->
+<div id="admob-banner"></div>
+<div class="toast" id="toast"></div>
 
-    <audio id="radioPlayer">
+<script>
+(function(){
+"use strict";
 
-    <script>
-        // -------- TABS SYSTEM --------
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById(tab.dataset.section).classList.add('active');
-            });
-        });
+/* ================= ICONS (inline SVG, no emoji) ================= */
+var ICONS = {
+  calc:'<rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8.01" y2="11"/><line x1="12" y1="11" x2="12.01" y2="11"/><line x1="16" y1="11" x2="16.01" y2="11"/><line x1="8" y1="15" x2="8.01" y2="15"/><line x1="12" y1="15" x2="12.01" y2="15"/><line x1="16" y1="15" x2="16.01" y2="15"/><line x1="8" y1="19" x2="8.01" y2="19"/><line x1="12" y1="19" x2="16" y2="19"/>',
+  ruler:'<path d="M3 17 L17 3 L21 7 L7 21 Z"/><line x1="7" y1="7" x2="10" y2="10"/><line x1="11" y1="11" x2="13" y2="13"/><line x1="14" y1="14" x2="16" y2="16"/>',
+  percent:'<line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+  receipt:'<path d="M6 2h12v20l-2-1.5L14 22l-2-1.5L10 22l-2-1.5L6 22Z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="15" x2="13" y2="15"/>',
+  bank:'<path d="M3 9l9-5 9 5"/><line x1="5" y1="9" x2="5" y2="18"/><line x1="19" y1="9" x2="19" y2="18"/><line x1="9" y1="9" x2="9" y2="18"/><line x1="15" y1="9" x2="15" y2="18"/><line x1="3" y1="19" x2="21" y2="19"/>',
+  heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/>',
+  cake:'<path d="M4 21h16"/><path d="M5 21v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7"/><line x1="12" y1="10" x2="12" y2="6"/><circle cx="12" cy="4.5" r="1.2"/>',
+  calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/>',
+  key:'<circle cx="8" cy="15" r="4"/><line x1="11" y1="12" x2="21" y2="2"/><line x1="16" y1="7" x2="19" y2="10"/>',
+  qr:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="14" y2="21"/><line x1="18" y1="14" x2="18" y2="18"/><line x1="14" y1="18" x2="21" y2="18"/>',
+  palette:'<path d="M12 22a10 10 0 1 1 10-10c0 2-1.5 3-3 3h-2a2 2 0 0 0-2 2c0 .4.1.8.4 1.1.4.5.6.9.6 1.6A1.6 1.6 0 0 1 12 22Z"/><circle cx="7.5" cy="10.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="7.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="16.5" cy="10.5" r="1.1" fill="currentColor" stroke="none"/>',
+  notes:'<path d="M6 2h8l4 4v16H6Z"/><path d="M14 2v4h4"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/>',
+  check:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12l3 3 5-6"/>',
+  timer:'<circle cx="12" cy="13" r="8"/><line x1="12" y1="13" x2="12" y2="9"/><line x1="9" y1="2" x2="15" y2="2"/>',
+  type:'<polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>',
+  dice:'<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.2" fill="currentColor" stroke="none"/><circle cx="16" cy="8" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="1.2" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.9" y1="4.9" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.1" y2="19.1"/><line x1="4.9" y1="19.1" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.1" y2="4.9"/>',
+  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>',
+  back:'<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
+  plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
+  copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  refresh:'<polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 1 1-2-9.4L23 10"/>',
+  play:'<polygon points="7 4 20 12 7 20 7 4" fill="currentColor" stroke="none"/>',
+  pause:'<rect x="7" y="5" width="3.5" height="14" rx="1" fill="currentColor" stroke="none"/><rect x="13.5" y="5" width="3.5" height="14" rx="1" fill="currentColor" stroke="none"/>',
+  checkmark:'<polyline points="20 6 9 17 4 12"/>',
+  search:'<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/>'
+};
+function svgIcon(name,size){
+  return '<svg viewBox="0 0 24 24" width="'+(size||20)+'" height="'+(size||20)+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICONS[name]+'</svg>';
+}
 
-        // -------- RADIO STATIONS (3 working) --------
-        const stations = [
-            { name: "🎵 Hit Radio", genre: "Musique / Hits", url: "https://hitradio-maroc.ice.infomaniak.ch/hitradio-maroc-128.mp3" },
-            { name: "⚽ Radio Mars", genre: "Sport / Musique", url: "https://radiomars.ice.infomaniak.ch/radiomars-128.mp3" },
-            { name: "📻 Med Radio", genre: "Généraliste", url: "https://medradio.ice.infomaniak.ch/medradio-128.mp3" }
-        ];
+/* ================= helpers ================= */
+var $ = function(s,el){return (el||document).querySelector(s);};
+function toast(msg){
+  var t=$('#toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove('show');},1800);
+}
+function copyText(txt){
+  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){toast('Copied to clipboard');},function(){toast('Copy failed');});}
+  else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Copied');}catch(e){toast('Copy failed');}document.body.removeChild(ta);}
+}
+function el(html){var d=document.createElement('div');d.innerHTML=html.trim();return d.firstChild;}
+function showResult(box,big,sub){box.querySelector('.big').textContent=big; if(sub!==undefined) box.querySelector('.sub').textContent=sub; box.classList.add('show');}
 
-        const player = document.getElementById('radioPlayer');
-        const nowPlayingName = document.getElementById('nowPlayingName');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const stopBtn = document.getElementById('stopBtn');
-        const radioList = document.getElementById('radioList');
-        let currentIndex = -1;
-        let isPlaying = false;
+/* ================= AdMob hooks (fill after wrapping to Android) =================
+   When you wrap this HTML with Capacitor + @capacitor-community/admob (or Median/GoNative),
+   the native bridge exposes an interstitial method. Call it here — every 5 tool opens.
+   Replace the console.log with your native call, e.g.:
+     AdMob.showInterstitial().catch(function(){});
+*/
+var AdmobHooks = {
+  toolOpenCount: 0,
+  maybeInterstitial: function(){
+    this.toolOpenCount++;
+    if(this.toolOpenCount % 5 === 0){
+      // === INTERSTITIAL AD CALL POINT ===
+      console.log('[AdMob] interstitial slot — wire your native SDK here');
+      // ===================================
+    }
+  },
+  bannerSlotId: 'admob-banner'
+};
+window.AdmobHooks = AdmobHooks;
 
-        // Render radio list
-        stations.forEach((s, i) => {
-            const div = document.createElement('div');
-            div.className = 'item';
-            div.innerHTML = `
-                <div class="item-info">
-                    <h3>${s.name}</h3>
-                    <p>${s.genre}</p>
-                </div>
-                <button class="play-btn">▶</button>
-            `;
-            div.addEventListener('click', () => playStation(i));
-            radioList.appendChild(div);
-        });
+/* ================= theme ================= */
+var themeBtn=$('#themeBtn'), backBtn=$('#backBtn');
+function renderThemeIcon(){
+  var dark=document.documentElement.getAttribute('data-theme')==='dark';
+  themeBtn.innerHTML=svgIcon(dark?'sun':'moon',20);
+}
+themeBtn.addEventListener('click',function(){
+  var cur=document.documentElement.getAttribute('data-theme');
+  var next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  try{localStorage.setItem('pt-theme',next);}catch(e){}
+  renderThemeIcon();
+});
+try{var saved=localStorage.getItem('pt-theme');if(saved){document.documentElement.setAttribute('data-theme',saved);}}catch(e){}
+renderThemeIcon();
+backBtn.innerHTML=svgIcon('back',20);
 
-        function playStation(i) {
-            currentIndex = i;
-            player.src = stations[i].url;
-            player.play();
-            isPlaying = true;
-            nowPlayingName.textContent = stations[i].name;
-            playPauseBtn.textContent = '⏸';
-            document.querySelectorAll('#radioList .item').forEach((el, idx) => {
-                el.classList.toggle('playing', idx === i);
-            });
-        }
+/* ================= tools registry ================= */
+/* Each tool: {id, name, cat, icon, desc, init(container)} */
+var TOOLS = [];
+function reg(t){TOOLS.push(t);}
 
-        playPauseBtn.addEventListener('click', () => {
-            if (currentIndex === -1) return;
-            if (isPlaying) { player.pause(); playPauseBtn.textContent = '▶'; }
-            else { player.play(); playPauseBtn.textContent = '⏸'; }
-            isPlaying = !isPlaying;
-        });
+/* ---------- 1. Calculator ---------- */
+reg({id:'calc',name:'Calculator',cat:'Calculate',icon:'calc',desc:'Basic arithmetic with a clean keypad.',
+init:function(c){
+  c.innerHTML='<div class="panel"><div class="calc-display" id="calcDisp">0</div>'+
+  '<div class="calc-keys">'+
+  '<button class="fn" data-k="C">C</button><button class="fn" data-k="back">⌫</button><button class="fn" data-k="%">%</button><button class="op" data-k="/">÷</button>'+
+  '<button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button class="op" data-k="*">×</button>'+
+  '<button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button class="op" data-k="-">−</button>'+
+  '<button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button class="op" data-k="+">+</button>'+
+  '<button data-k="0">0</button><button data-k=".">.</button><button class="op" data-k="(">(</button><button class="eq" data-k="=">=</button>'+
+  '</div></div>';
+  var disp=$('#calcDisp',c), expr='';
+  function render(){disp.textContent=expr||'0';}
+  function compute(){
+    try{
+      var e=expr.replace(/%/g,'/100');
+      if(!/^[0-9+\-*/().\s]+$/.test(e)) return 'Error';
+      var v=Function('"use strict";return ('+e+')')();
+      if(typeof v!=='number'||!isFinite(v)) return 'Error';
+      return String(Math.round(v*1e10)/1e10);
+    }catch(err){return 'Error';}
+  }
+  c.querySelectorAll('.calc-keys button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var k=b.getAttribute('data-k');
+      if(k==='C'){expr='';}
+      else if(k==='back'){expr=expr.slice(0,-1);}
+      else if(k==='='){expr=compute();}
+      else{
+        if(expr==='Error') expr='';
+        expr+=k;
+      }
+      render();
+    });
+  });
+}});
 
-        stopBtn.addEventListener('click', () => {
-            player.pause();
-            player.src = '';
-            isPlaying = false;
-            currentIndex = -1;
-            nowPlayingName.textContent = 'Aucune sélection';
-            playPauseBtn.textContent = '▶';
-            document.querySelectorAll('.item').forEach(el => el.classList.remove('playing'));
-        });
+/* ---------- 2. Unit Converter ---------- */
+var UNITS = {
+  Length:{m:1,km:1000,cm:0.01,mm:0.001,mi:1609.344,yd:0.9144,ft:0.3048,in:0.0254},
+  Weight:{kg:1,g:0.001,lb:0.45359237,oz:0.0283495231,t:1000,st:6.35029318},
+  Volume:{l:1,ml:0.001,m3:1000,gal_us:3.78541,gal_uk:4.54609,qt:0.946353,pt:0.473176,cup:0.24,fl_oz:0.0295735},
+  Area:{m2:1,km2:1e6,ha:10000,acre:4046.86,ft2:0.092903,mi2:2.59e6},
+  Speed:{ms:1,kmh:0.277778,mph:0.44704,kn:0.514444,fts:0.3048},
+  Data:{B:1,KB:1024,MB:1048576,GB:1073741824,TB:1099511627776,bit:0.125}
+};
+reg({id:'unit',name:'Unit Converter',cat:'Convert',icon:'ruler',desc:'Length, weight, volume, area, speed & data.',
+init:function(c){
+  c.innerHTML='<div class="panel"><label>Category</label><select id="uCat"></select>'+
+  '<div class="row" style="margin-top:14px"><div><label>From</label><select id="uFrom"></select></div>'+
+  '<div><label>To</label><select id="uTo"></select></div></div>'+
+  '<label style="margin-top:14px">Value</label><input type="number" id="uVal" value="1" step="any">'+
+  '<div class="result" id="uRes"><div class="big"></div><div class="sub"></div></div></div>';
+  var cat=$('#uCat',c), from=$('#uFrom',c), to=$('#uTo',c), val=$('#uVal',c), res=$('#uRes',c);
+  Object.keys(UNITS).forEach(function(k){cat.appendChild(el('<option value="'+k+'">'+k+'</option>'));});
+  function fillUnits(){
+    from.innerHTML='';to.innerHTML='';
+    Object.keys(UNITS[cat.value]).forEach(function(u){
+      from.appendChild(el('<option value="'+u+'">'+u.toUpperCase()+'</option>'));
+      to.appendChild(el('<option value="'+u+'">'+u.toUpperCase()+'</option>'));
+    });
+    to.selectedIndex=1; convert();
+  }
+  function convert(){
+    var v=parseFloat(val.value);
+    if(isNaN(v)){res.classList.remove('show');return;}
+    var t=UNITS[cat.value], out=v*t[from.value]/t[to.value];
+    showResult(res, (Math.round(out*1e8)/1e8).toLocaleString(), v+' '+from.value.toUpperCase()+' = '+out.toPrecision(6)+' '+to.value.toUpperCase());
+  }
+  cat.addEventListener('change',fillUnits);
+  [from,to,val].forEach(function(e){e.addEventListener('input',convert);});
+  fillUnits();
+}});
 
-        // -------- TV OPENERS --------
-        function openTV(channel) {
-            const links = {
-                snrt: "https://www.snrt.ma/fr/direct/al-aoula",
-                "2m": "https://www.2m.ma/direct",
-                mediasat: "https://www.medi1tv.com/fr/direct"
-            };
-            window.open(links[channel], '_blank');
-        }
-    </script>
+/* ---------- 3. Percentage ---------- */
+reg({id:'pct',name:'Percentage',cat:'Calculate',icon:'percent',desc:'Find % of a number, and reverse %.',
+init:function(c){
+  c.innerHTML='<div class="panel"><div class="row"><div><label>X % of Y</label><input type="number" id="p1" value="15" step="any"></div>'+
+  '<div><label>of</label><input type="number" id="p2" value="200" step="any"></div></div>'+
+  '<div class="result" id="pRes1"><div class="big"></div><div class="sub"></div></div>'+
+  '<label>X is what % of Y?</label><div class="row"><div><input type="number" id="p3" value="30" step="any"></div>'+
+  '<div><input type="number" id="p4" value="200" step="any"></div></div>'+
+  '<div class="result" id="pRes2"><div class="big"></div><div class="sub"></div></div></div>';
+  function calc(){
+    var a=parseFloat($('#p1',c).value), b=parseFloat($('#p2',c).value);
+    if(!isNaN(a)&&!isNaN(b)) showResult($('#pRes1',c), (a*b/100).toLocaleString(), a+'% of '+b);
+    var x=parseFloat($('#p3',c).value), y=parseFloat($('#p4',c).value);
+    if(!isNaN(x)&&!isNaN(y)&&y!==0) showResult($('#pRes2',c), (x/y*100).toFixed(2)+'%', x+' / '+y);
+  }
+  c.querySelectorAll('input').forEach(function(i){i.addEventListener('input',calc);});
+  calc();
+}});
+
+/* ---------- 4. Tip Calculator ---------- */
+reg({id:'tip',name:'Tip Calculator',cat:'Calculate',icon:'receipt',desc:'Split the bill with tip, per person.',
+init:function(c){
+  c.innerHTML='<div class="panel"><label>Bill amount</label><input type="number" id="tBill" value="50" step="any">'+
+  '<div class="row"><div><label>Tip %</label><input type="number" id="tPct" value="15"></div>'+
+  '<div><label>People</label><input type="number" id="tPeople" value="2" min="1"></div></div>'+
+  '<div class="result" id="tRes"><div class="big"></div><div class="sub"></div></div></div>';
+  function calc(){
+    var bill=parseFloat($('#tBill',c).value), pct=parseFloat($('#tPct',c).value), n=parseInt($('#tPeople',c).value);
+    if(isNaN(bill)||isNaN(pct)||!n||n<1) return;
+    var tip=bill*pct/100, total=bill+tip, each=total/n;
+    showResult($('#tRes',c), each.toFixed(2)+' / person', 'Tip '+tip.toFixed(2)+' · Total '+total.toFixed(2));
+  }
+  c.querySelectorAll('input').forEach(function(i){i.addEventListener('input',calc);});
+  calc();
+}});
+
+/* ---------- 5. Loan Calculator ---------- */
+reg({id:'loan',name:'Loan / EMI',cat:'Calculate',icon:'bank',desc:'Monthly payment, interest & total cost.',
+init:function(c){
+  c.innerHTML='<div class="panel"><label>Loan amount</label><input type="number" id="lP" value="10000" step="any">'+
+  '<div class="row"><div><label>Annual interest %</label><input type="number" id="lR" value="7" step="any"></div>'+
+  '<div><label>Years</label><input type="number" id="lY" value="5" min="1"></div></div>'+
+  '<div class="result" id="lRes"><div class="big"></div><div class="sub"></div></div>'+
+  '<div class="stat-grid"><div class="stat"><b id="lTotal">–</b><span>Total payable</span></div>'+
+  '<div class="stat"><b id="lInt">–</b><span>Total interest</span></div></div></div>';
+  function calc(){
+    var P=parseFloat($('#lP',c).value), apy=parseFloat($('#lR',c).value), y=parseInt($('#lY',c).value);
+    if(isNaN(P)||isNaN(apy)||!y||y<1) return;
+    var r=apy/1200, n=y*12, emi;
+    if(r===0) emi=P/n; else emi=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+    var total=emi*n;
+    showResult($('#lRes',c), emi.toFixed(2)+' / month', 'Over '+n+' months');
+    $('#lTotal',c).textContent=total.toFixed(0);
+    $('#lInt',c).textContent=(total-P).toFixed(0);
+  }
+  c.querySelectorAll('input').forEach(function(i){i.addEventListener('input',calc);});
+  calc();
+}});
+
+/* ---------- 6. BMI ---------- */
+reg({id:'bmi',name:'BMI Calculator',cat:'Health',icon:'heart',desc:'Body Mass Index with category.',
+init:function(c){
+  c.innerHTML='<div class="panel"><div class="row"><div><label>Height (cm)</label><input type="number" id="bH" value="170"></div>'+
+  '<div><label>Weight (kg)</label><input type="number" id="bW" value="70" step="any"></div></div>'+
+  '<div class="result" id="bRes"><div class="big"></div><div class="sub"></div><div class="pill" id="bPill"></div></div></div>';
+  function calc(){
+    var h=parseFloat($('#bH',c).value), w=parseFloat($('#bW',c).value);
+    if(!h||!w) return;
+    var bmi=w/Math.pow(h/100,2);
+    var cat = bmi<18.5?'Underweight': bmi<25?'Normal': bmi<30?'Overweight':'Obese';
+    showResult($('#bRes',c), bmi.toFixed(1), 'kg/m²');
+    $('#bPill',c).textContent=cat;
+  }
+  c.querySelectorAll('input').forEach(function(i){i.addEventListener('input',calc);});
+  calc();
+}});
+
+/* ---------- 7. Age Calculator ---------- */
+reg({id:'age',name:'Age Calculator',cat:'Date & Time',icon:'cake',desc:'Your exact age in years, months, days.',
+init:function(c){
+  c.innerHTML='<div class="panel"><label>Date of birth</label><input type="date" id="aDob">'+
+  '<div class="result" id="aRes"><div class="big"></div><div class="sub"></div></div>'+
+  '<div class="stat-grid"><div class="stat"><b id="aMonths">–</b><span>Months</span></div>'+
+  '<div class="stat"><b id="aWeeks">–</b><span>Weeks</span></div>'+
+  '<div class="stat"><b id="aDays">–</b><span>Days</span></div></div></div>';
+  function calc(){
+    var dob=new Date($('#aDob',c).value);
+    if(isNaN(dob)) return;
+    var now=new Date();
+    var y=now.getFullYear()-dob.getFullYear(), m=now.getMonth()-dob.getMonth(), d=now.getDate()-dob.getDate();
+    if(d<0){m--; d+=new Date(now.getFullYear(),now.getMonth(),0).getDate();}
+    if(m<0){y--; m+=12;}
+    var days=Math.floor((now-dob)/86400000);
+    showResult($('#aRes',c), y+' years', m+' months · '+d+' days');
+    $('#aMonths',c).textContent=y*12+m;
+    $('#aWeeks',c).textContent=Math.floor(days/7).toLocaleString();
+    $('#aDays',c).textContent=days.toLocaleString();
+  }
+  $('#aDob',c).addEventListener('input',calc);
+}});
+
+/* ---------- 8. Date Difference ---------- */
+reg({id:'datediff',name:'Date Difference',cat:'Date & Time',icon:'calendar',desc:'Days, weeks & months between two dates.',
+init:function(c){
+  c.innerHTML='<div class="panel"><div class="row"><div><label>From</label><input type="date" id="d1"></div>'+
+  '<div><label>To</label><input type="date" id="d2"></div></div>'+
+  '<div class="result" id="dRes"><div class="big"></div><div class="sub"></div></div></div>';
+  function calc(){
+    var a=new Date($('#d1',c).value), b=new Date($('#d2',c).value);
+    if(isNaN(a)||isNaN(b)) return;
+    var days=Math.round((b-a)/86400000);
+    showResult($('#dRes',c), Math.abs(days).toLocaleString()+' days', Math.abs(Math.floor(days/7))+' weeks · approx '+Math.abs(Math.round(days/30.44))+' months');
+  }
+  c.querySelectorAll('input').forEach(function(i){i.addEventListener('input',calc);});
+}});
+
+/* ---------- 9. Password Generator ---------- */
+reg({id:'pass',name:'Password Generator',cat:'Security',icon:'key',desc:'Strong random passwords, generated on-device.',
+init:function(c){
+  c.innerHTML='<div class="panel"><label>Length: <span id="plLen">16</span></label><input type="range" id="pLen" min="6" max="64" value="16">'+
+  '<div class="checkline"><input type="checkbox" id="pU" checked> Uppercase A-Z</div>'+
+  '<div class="checkline"><input type="checkbox" id="pL" checked> Lowercase a-z</div>'+
+  '<div class="checkline"><input type="checkbox" id="pN" checked> Numbers 0-9</div>'+
+  '<div class="checkline"><input type="checkbox" id="pS" checked> Symbols !@#$</div>'+
+  '<div class="result show" id="pRes"><div class="big" id="pOut" style="font-family:monospace;word-break:break-all"></div></div>'+
+  '<div class="btn-row"><button class="btn primary" id="pGen">'+svgIcon('refresh',16)+' Generate</button>'+
+  '<button class="btn" id="pCopy">'+svgIcon('copy',16)+' Copy</button></div></div>';
+  var sets={U:'ABCDEFGHJKLMNPQRSTUVWXYZ',L:'abcdefghijkmnpqrstuvwxyz',N:'23456789',S:'!@#$%^&*()-_=+[]{};:,.<>?'};
+  function gen(){
+    var len=parseInt($('#pLen',c).value), pool='';
+    ['U','L','N','S'].forEach(function(k){if($('#p'+k,c).checked) pool+=sets[k];});
+    if(!pool){$('#pOut',c).textContent='Select at least one option';return;}
+    var out='';
+    var arr=new Uint32Array(len);
+    if(window.crypto&&crypto.getRandomValues){crypto.getRandomValues(arr); for(var i=0;i<len;i++) out+=pool[arr[i]%pool.length];}
+    else{for(var j=0;j<len;j++) out+=pool[Math.floor(Math.random()*pool.length)];}
+    $('#pOut',c).textContent=out;
+  }
+  $('#pLen',c).addEventListener('input',function(){$('#plLen',c).textContent=this.value;gen();});
+  c.querySelectorAll('input[type=checkbox]').forEach(function(i){i.addEventListener('change',gen);});
+  $('#pGen',c).addEventListener('click',gen);
+  $('#pCopy',c).addEventListener('click',function(){copyText($('#pOut',c).textContent);});
+  gen();
+}});
+
+/* ---------- 10. QR Code Generator ---------- */
+reg({id:'qr',name:'QR Code Maker',cat:'Create',icon:'qr',desc:'Turn any text or link into a scannable QR code.',
+init:function(c){
+  c.innerHTML='<div class="panel"><label>Text or URL</label><input type="text" id="qText" placeholder="https://example.com" value="https://">'+
+  '<div class="btn-row"><button class="btn primary" id="qGen">Generate QR</button>'+
+  '<button class="btn" id="qDl">Download PNG</button></div>'+
+  '<div id="qrOut"></div></div>';
+  var out=$('#qrOut',c), lastSvg='';
+  function gen(){
+    var txt=$('#qText',c).value.trim();
+    if(!txt){toast('Enter some text first');return;}
+    if(typeof qrcode==='undefined'){out.innerHTML='<p class="empty">QR library loading… check your connection and try again.</p>';return;}
+    try{
+      var qr=qrcode(0,'M'); qr.addData(txt); qr.make();
+      lastSvg=qr.createSvgTag(8,4);
+      out.innerHTML='<div style="display:inline-block;background:#fff;padding:14px;border-radius:12px;line-height:0">'+lastSvg+'</div>';
+      var svgEl=out.querySelector('svg');
+      if(svgEl){svgEl.style.maxWidth='200px';svgEl.style.height='auto';}
+    }catch(e){out.innerHTML='<p class="empty">Could not generate: too much text.</p>';lastSvg='';}
+  }
+  $('#qGen',c).addEventListener('click',gen);
+  $('#qDl',c).addEventListener('click',function(){
+    if(!lastSvg){toast('Generate a QR first');return;}
+    try{
+      var blob=new Blob([lastSvg],{type:'image/svg+xml'});
+      var url=URL.createObjectURL(blob);
+      var img=new Image();
+      img.onload=function(){
+        var cv=document.createElement('canvas');cv.width=512;cv.height=512;
+        var ctx=cv.getContext('2d');ctx.fillStyle='#ffffff';ctx.fillRect(0,0,512,512);
+        ctx.drawImage(img,16,16,480,480);
+        URL.revokeObjectURL(url);
+        var a=document.createElement('a');a.href=cv.toDataURL('image/png');a.download='qrcode.png';
+        document.body.appendChild(a);a.click();document.body.removeChild(a);
+      };
+      img.onerror=function(){URL.revokeObjectURL(url);toast('Download failed');};
+      img.src=url;
+    }catch(e){toast('Download failed');}
+  });
+}});
+
+/* ---------- 11. Color Picker ---------- */
+reg({id:'color',name:'Color Picker',cat:'Create',icon:'palette',desc:'Pick a color, get HEX / RGB / HSL + a 5-tint palette.',
+init:function(c){
+  c.innerHTML='<div class="panel"><label>Pick a color</label><div class="row"><div><input type="color" id="cPick" value="#c47046" style="height:52px;padding:4px;cursor:pointer"></div>'+
+  '<div><input type="text" id="cHex" value="#c47046"></div></div>'+
+  '<div class="stat-grid"><div class="stat"><b id="cRgb" style="font-size:14px">–</b><span>RGB</span></div>'+
+  '<div class="stat"><b id="cHsl" style="font-size:14px">–</b><span>HSL</span></div></div>'+
+  '<div class="swatch-row" id="cSwatches"></div></div>';
+  function hexToRgb(h){h=h.replace('#','');return {r:parseInt(h.substr(0,2),16),g:parseInt(h.substr(2,2),16),b:parseInt(h.substr(4,2),16)};}
+  function rgbToHsl(r,g,b){r/=255;g/=255;b/=255;var mx=Math.max(r,g,b),mn=Math.min(r,g,b),h,s,l=(mx+mn)/2;
+    if(mx===mn){h=s=0;}else{var d=mx-mn;s=l>0.5?d/(2-mx-mn):d/(mx+mn);
+    switch(mx){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;case b:h=(r-g)/d+4;break;}h/=6;}
+    return {h:Math.round(h*360),s:Math.round(s*100),l:Math.round(l*100)};}
+  function shade(rgb,amt){return 'rgb('+Math.max(0,Math.min(255,rgb.r+amt))+','+Math.max(0,Math.min(255,rgb.g+amt))+','+Math.max(0,Math.min(255,rgb.b+amt))+')';}
+  function update(){
+    var hex=$('#cHex',c).value;
+    if(!/^#[0-9a-fA-F]{6}$/.test(hex)) return;
+    $('#cPick',c).value=hex;
+    var rgb=hexToRgb(hex), hsl=rgbToHsl(rgb.r,rgb.g,rgb.b);
+    $('#cRgb',c).textContent=rgb.r+', '+rgb.g+', '+rgb.b;
+    $('#cHsl',c).textContent=hsl.h+'°, '+hsl.s+'%, '+hsl.l+'%';
+    var sw=$('#cSwatches',c);sw.innerHTML='';
+    [-60,-30,0,30,60].forEach(function(amt){
+      var col=shade(rgb,amt);
+      var d=el('<div class="swatch" style="background:'+col+'"><span>'+col.replace('rgb(','').replace(')','')+'</span></div>');
+      d.addEventListener('click',function(){copyText(col);});
+      sw.appendChild(d);
+    });
+  }
+  $('#cPick',c).addEventListener('input',function(){$('#cHex',c).value=this.value;update();});
+  $('#cHex',c).addEventListener('input',update);
+  update();
+}});
+
+/* ---------- 12. Notes ---------- */
+reg({id:'notes',name:'Notes',cat:'Productivity',icon:'notes',desc:'Auto-saved notes stored only on your device.',
+init:function(c){
+  c.innerHTML='<div class="panel"><textarea id="nArea" placeholder="Start typing… your note saves automatically."></textarea>'+
+  '<div class="stat-grid"><div class="stat"><b id="nWords">0</b><span>Words</span></div>'+
+  '<div class="stat"><b id="nChars">0</b><span>Characters</span></div></div>'+
+  '<div class="btn-row"><button class="btn" id="nClear">'+svgIcon('trash',16)+' Clear</button>'+
+  '<button class="btn" id="nCopy">'+svgIcon('copy',16)+' Copy</button></div></div>';
+  var ta=$('#nArea',c);
+  try{ta.value=localStorage.getItem('pt-notes')||'';}catch(e){}
+  function stats(){
+    var t=ta.value;
+    $('#nChars',c).textContent=t.length;
+    $('#nWords',c).textContent=t.trim()?t.trim().split(/\s+/).length:0;
+    try{localStorage.setItem('pt-notes',t);}catch(e){}
+  }
+  ta.addEventListener('input',stats);
+  $('#nClear',c).addEventListener('click',function(){ta.value='';stats();toast('Note cleared');});
+  $('#nCopy',c).addEventListener('click',function(){copyText(ta.value);});
+  stats();
+}});
+
+/* ---------- 13. Todo List ---------- */
+reg({id:'todo',name:'To-Do List',cat:'Productivity',icon:'check',desc:'Simple tasks, saved on your device.',
+init:function(c){
+  c.innerHTML='<div class="panel"><div style="display:flex;gap:10px"><input type="text" id="tdIn" placeholder="Add a task…" style="flex:1">'+
+  '<button class="btn primary" id="tdAdd" style="padding:0 16px">'+svgIcon('plus',18)+'</button></div>'+
+  '<div id="tdList" style="margin-top:10px"></div></div>';
+  var list=$('#tdList',c), inp=$('#tdIn',c), items=[];
+  try{items=JSON.parse(localStorage.getItem('pt-todo')||'[]');}catch(e){items=[];}
+  function save(){try{localStorage.setItem('pt-todo',JSON.stringify(items));}catch(e){}}
+  function render(){
+    list.innerHTML='';
+    if(!items.length){list.innerHTML='<p class="empty">No tasks yet — add one above.</p>';return;}
+    items.forEach(function(it,i){
+      var row=el('<div class="todo-item'+(it.done?' done':'')+'"><div class="check">'+svgIcon('checkmark',14)+'</div><span></span><button class="del">'+svgIcon('trash',18)+'</button></div>');
+      row.querySelector('span').textContent=it.text;
+      row.querySelector('.check').addEventListener('click',function(){items[i].done=!items[i].done;save();render();});
+      row.querySelector('.del').addEventListener('click',function(){items.splice(i,1);save();render();});
+      list.appendChild(row);
+    });
+  }
+  function add(){
+    var t=inp.value.trim(); if(!t) return;
+    items.unshift({text:t,done:false}); inp.value=''; save(); render();
+  }
+  $('#tdAdd',c).addEventListener('click',add);
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter')add();});
+  render();
+}});
+
+/* ---------- 14. Timer & Stopwatch ---------- */
+reg({id:'timer',name:'Timer & Stopwatch',cat:'Date & Time',icon:'timer',desc:'Countdown timer and precise stopwatch.',
+init:function(c){
+  c.innerHTML='<div class="panel"><div class="tabs"><button class="active" data-tab="sw">Stopwatch</button><button data-tab="tm">Timer</button></div>'+
+  '<div class="chrono" id="chDisp">00:00<small>.00</small></div>'+
+  '<div id="tmSet" style="display:none"><div class="row3"><div><label>Minutes</label><input type="number" id="tmMin" value="5" min="0"></div>'+
+  '<div><label>Seconds</label><input type="number" id="tmSec" value="0" min="0" max="59"></div><div></div></div></div>'+
+  '<div class="btn-row" style="justify-content:center"><button class="btn primary" id="chStart">'+svgIcon('play',16)+' Start</button>'+
+  '<button class="btn" id="chReset">Reset</button></div></div>';
+  var disp=$('#chDisp',c), startBtn=$('#chStart',c), resetBtn=$('#chReset',c);
+  var tmSet=$('#tmSet',c), tab='sw', raf=null, running=false, startTs=0, acc=0, endTs=0;
+  function fmt(ms){
+    var neg=ms<0; ms=Math.abs(ms);
+    var h=Math.floor(ms/3600000), m=Math.floor(ms/60000)%60, s=Math.floor(ms/1000)%60, cs=Math.floor(ms/10)%100;
+    var p=function(n){return (n<10?'0':'')+n;};
+    var str=(h>0?p(h)+':':'')+p(m)+':'+p(s)+'<small>.'+p(cs)+'</small>';
+    return neg?'-'+str:str;
+  }
+  function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}running=false;startBtn.innerHTML=svgIcon('play',16)+' Start';}
+  function beep(){try{var ctx=new (window.AudioContext||window.webkitAudioContext)();var o=ctx.createOscillator();var g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=880;g.gain.setValueAtTime(.3,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+1);o.start();o.stop(ctx.currentTime+1);}catch(e){}}
+  function loop(){
+    var now=Date.now(), el;
+    if(tab==='sw'){el=acc+(running?now-startTs:0);}
+    else{el=endTs-now; if(el<=0){el=0;stop();beep();toast('Time is up!');}}
+    disp.innerHTML=fmt(el);
+    raf=requestAnimationFrame(loop);
+  }
+  function startLoop(){if(!raf)raf=requestAnimationFrame(loop);}
+  startBtn.addEventListener('click',function(){
+    if(running){acc+=(Date.now()-startTs);stop();return;}
+    running=true; startTs=Date.now();
+    if(tab==='tm'){
+      var min=parseInt($('#tmMin',c).value)||0, sec=parseInt($('#tmSec',c).value)||0;
+      if(acc===0) endTs=startTs+(min*60+sec)*1000; else endTs=startTs+acc;
+    }
+    startBtn.innerHTML=svgIcon('pause',16)+' Pause';
+    startLoop();
+  });
+  resetBtn.addEventListener('click',function(){stop();acc=0;disp.innerHTML=fmt(0);});
+  c.querySelectorAll('.tabs button').forEach(function(b){
+    b.addEventListener('click',function(){
+      c.querySelectorAll('.tabs button').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active'); tab=b.getAttribute('data-tab');
+      tmSet.style.display=tab==='tm'?'block':'none';
+      stop();acc=0;disp.innerHTML=fmt(0);
+    });
+  });
+  disp.innerHTML=fmt(0);
+}});
+
+/* ---------- 15. Text Tools ---------- */
+reg({id:'text',name:'Text Tools',cat:'Productivity',icon:'type',desc:'Word count, case conversion, reverse & clean.',
+init:function(c){
+  c.innerHTML='<div class="panel"><textarea id="txArea" placeholder="Paste or type your text here…"></textarea>'+
+  '<div class="stat-grid"><div class="stat"><b id="txChars">0</b><span>Characters</span></div>'+
+  '<div class="stat"><b id="txWords">0</b><span>Words</span></div>'+
+  '<div class="stat"><b id="txLines">0</b><span>Lines</span></div></div>'+
+  '<div class="btn-row"><button class="btn" data-fn="upper">UPPERCASE</button><button class="btn" data-fn="lower">lowercase</button>'+
+  '<button class="btn" data-fn="title">Title Case</button><button class="btn" data-fn="reverse">Reverse</button>'+
+  '<button class="btn" data-fn="clean">Clean Spaces</button><button class="btn" data-fn="copy">'+svgIcon('copy',16)+' Copy</button></div></div>';
+  var ta=$('#txArea',c);
+  function stats(){
+    var t=ta.value;
+    $('#txChars',c).textContent=t.length;
+    $('#txWords',c).textContent=t.trim()?t.trim().split(/\s+/).length:0;
+    $('#txLines',c).textContent=t?t.split('\n').length:0;
+  }
+  ta.addEventListener('input',stats);
+  c.querySelectorAll('[data-fn]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=ta.value, fn=b.getAttribute('data-fn');
+      if(fn==='upper') t=t.toUpperCase();
+      else if(fn==='lower') t=t.toLowerCase();
+      else if(fn==='title') t=t.toLowerCase().replace(/\b\w/g,function(x){return x.toUpperCase();});
+      else if(fn==='reverse') t=t.split('').reverse().join('');
+      else if(fn==='clean') t=t.replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim();
+      else if(fn==='copy'){copyText(t);return;}
+      ta.value=t; stats();
+    });
+  });
+}});
+
+/* ---------- 16. Random Generator ---------- */
+reg({id:'random',name:'Random Generator',cat:'Fun',icon:'dice',desc:'Random number, dice roll & coin flip.',
+init:function(c){
+  c.innerHTML='<div class="panel"><label>Random number between</label><div class="row"><div><input type="number" id="rMin" value="1"></div>'+
+  '<div><input type="number" id="rMax" value="100"></div></div>'+
+  '<div class="result" id="rRes"><div class="big"></div><div class="sub"></div></div>'+
+  '<div class="btn-row"><button class="btn primary" id="rNum">Generate Number</button>'+
+  '<button class="btn" id="rDice">Roll Dice</button><button class="btn" id="rCoin">Flip Coin</button></div></div>';
+  var res=$('#rRes',c);
+  $('#rNum',c).addEventListener('click',function(){
+    var a=parseInt($('#rMin',c).value), b=parseInt($('#rMax',c).value);
+    if(isNaN(a)||isNaN(b)||b<=a){toast('Enter valid min/max');return;}
+    showResult(res, String(Math.floor(Math.random()*(b-a+1))+a), 'Random between '+a+' and '+b);
+  });
+  $('#rDice',c).addEventListener('click',function(){
+    var d1=Math.floor(Math.random()*6)+1, d2=Math.floor(Math.random()*6)+1;
+    showResult(res, d1+' + '+d2+' = '+(d1+d2), 'Two dice rolled');
+  });
+  $('#rCoin',c).addEventListener('click',function(){
+    showResult(res, Math.random()<0.5?'HEADS':'TAILS', 'Coin flipped');
+  });
+}});
+
+/* ================= navigation & home grid ================= */
+var homeView=$('#homeView'), toolView=$('#toolView'), toolBody=$('#toolBody');
+var pageTitle=$('#pageTitle'), pageSub=$('#pageSub'), toolTitle=$('#toolTitle'), toolDesc=$('#toolDesc');
+var gridWrap=$('#toolGridWrap'), search=$('#search');
+
+function renderHome(filter){
+  gridWrap.innerHTML='';
+  var cats={};
+  TOOLS.forEach(function(t){
+    if(filter && (t.name+' '+t.cat+' '+t.desc).toLowerCase().indexOf(filter.toLowerCase())===-1) return;
+    (cats[t.cat]=cats[t.cat]||[]).push(t);
+  });
+  if(!Object.keys(cats).length){gridWrap.innerHTML='<p class="empty">No tools match “'+filter+'”.</p>';return;}
+  Object.keys(cats).sort().forEach(function(cat){
+    var lab=el('<div class="cat-label">'+cat+'</div>'); gridWrap.appendChild(lab);
+    var grid=el('<div class="tool-grid"></div>');
+    cats[cat].forEach(function(t){
+      var card=el('<button class="tool-card"><div class="ticon">'+svgIcon(t.icon,22)+'</div><h3>'+t.name+'</h3><p>'+t.desc.split('.')[0]+'.</p></button>');
+      card.addEventListener('click',function(){go(t.id);});
+      grid.appendChild(card);
+    });
+    gridWrap.appendChild(grid);
+  });
+}
+search.addEventListener('input',function(){renderHome(this.value);});
+
+function go(id){
+  if(id==='home'){
+    homeView.style.display='block'; toolView.style.display='none';
+    backBtn.style.display='none';
+    pageTitle.textContent='Pocket Tools'; pageSub.textContent='16 tools · works offline';
+    window.scrollTo(0,0); return;
+  }
+  var t=TOOLS.find(function(x){return x.id===id;});
+  if(!t) return;
+  AdmobHooks.maybeInterstitial();
+  homeView.style.display='none'; toolView.style.display='block';
+  backBtn.style.display='grid';
+  pageTitle.textContent=t.name; pageSub.textContent=t.cat;
+  toolTitle.textContent=t.name; toolDesc.textContent=t.desc;
+  toolBody.innerHTML='';
+  t.init(toolBody);
+  window.scrollTo(0,0);
+}
+backBtn.addEventListener('click',function(){go('home');});
+
+renderHome();
+
+/* ================= service worker (offline) — optional, needs sw.js in repo ================= */
+if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+}
+})();
+</script>
 </body>
 </html>
